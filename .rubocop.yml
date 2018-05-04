@@ -1,0 +1,142 @@
+inherit_from: .rubocop_todo.yml
+
+# 50音順にならべること
+
+AllCops:
+  UseCache: true
+  TargetRubyVersion: 2.3
+  DisplayCopNames: true
+  Include:
+    - '**/Rakefile'
+  Exclude:
+    - '**/*.tab.rb' # Raccの出力ファイル
+    - '**/*_pb.rb' # protocの出力ファイル
+
+# heredoc のスタイルを <<~ に統一
+Layout/IndentHeredoc:
+  EnforcedStyle: squiggly
+
+# Rakefile のファイル名は例外
+Style/FileName:
+  Exclude:
+    - '**/Rakefile'
+    - '**/Gemfile'
+
+# get/set で始まるメソッド名を禁止しない
+Style/AccessorMethodName:
+  Enabled: false
+
+# 日本語コメントを禁止しない
+Style/AsciiComments:
+  Enabled: false
+
+# and/or のかわりに &&/|| を強制しない
+Style/AndOr:
+  Enabled: true
+  
+# 下記変換をやめる（インデントが統一しにくいため）
+# if x
+#   a = 1
+# else
+#   a = 2
+# end
+# =>
+# a = if x
+#       1
+#     else
+#       2
+#     end
+Style/ConditionalAssignment:
+  Enabled: false
+
+# class ModuleName::ClassName という書き方を禁止しない
+Style/ClassAndModuleChildren:
+  Enabled: false
+  
+# ドキュメントは書かなくても良い
+Style/Documentation:
+  Exclude:
+    - 'spec/**/*'
+    - 'test/**/*'
+    - '**/*'
+
+# 空のelse句を禁止しない
+Style/EmptyElse:
+  Enabled: false
+
+# format/sprintf/% のいずれでもよい
+Style/FormatString:
+  Enabled: false
+  
+# Rakefile は 古いHashスタイルのほうが自然なので、古いハッシュスタイルを許す
+Style/HashSyntax:
+  Exclude:
+    - '**/*.rake'
+    - '**/Rakefile'
+
+# "hoge".freezeを強制しない
+Style/MutableConstant:
+  Enabled: false
+
+# [:a, :b] => %i{a b} を強制しない
+Style/SymbolArray:
+  Enabled: false
+  
+# x == 0 のかわりに x.zero? は強制しない
+Style/NumericPredicate:
+  Enabled: false
+  
+# $1, $! などは使用して良い
+Style/PerlBackrefs:
+  Enabled: false
+
+# 文字列リテラルは、""/'' のどちらでもよい
+Style/StringLiterals:
+  Enabled: false
+
+# 1行rescueを禁止しない
+Style/RescueModifier:
+  Enabled: false
+
+# ???
+Metrics/AbcSize:
+  Max: 104
+
+# ブロックの長さ制限
+Metrics/BlockLength:
+  Max: 80
+  
+# クラスの長さ制限
+Metrics/ClassLength:
+  Max: 1000
+
+# メソッドの複雑性
+Metrics/CyclomaticComplexity:
+  Max: 31
+  
+# メソッドの複雑性
+Metrics/PerceivedComplexity:
+  Max: 31
+
+# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
+# URISchemes: http, https
+Metrics/LineLength:
+  #Max: 120
+  Max: 1000
+
+# メソッドの長さ制限
+Metrics/MethodLength:
+  Max: 80
+
+# モジュールの長さ制限
+Metrics/ModuleLength:
+  Max: 1000
+
+# guard を強制しない
+Style/GuardClause:
+  Enabled: false
+
+# $! => $ERROR_INFO を強制しない(require 'English'が必要なため)
+Style/SpecialGlobalVars:
+  Enabled: false
+

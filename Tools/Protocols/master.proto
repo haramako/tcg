@@ -1,0 +1,71 @@
+/**
+ * マスターデータ定義
+ *
+ * このファイルは、Tools/Protocols/master.proto で定義されている。
+ *
+ * ドキュメントを補足したい場合は、このファイルを編集すること
+ *
+ *
+ *
+ * ここで定義されたデータは、マスターデータに入る、もしくは、他のプロトコルから参照されるものである。
+ */
+syntax = "proto3";
+
+package Master;
+
+message PbxHeader {
+	map<int32,int32> int_index = 1;
+	map<string,int32> string_index = 2;
+}
+
+/**
+ * 変換メッセージ
+ */
+message I18nMessage {
+	string id = 1;
+	string text = 2;
+	string tag = 3;
+	string variant = 4;
+}
+
+/**
+ * メッセージの合成するための情報
+ *
+ * id1 のメッセージと id2 のメッセージが連続できた場合に、text のメッセージに合成する
+ */
+message MessageFusion {
+	string id1 = 1; /// 合成する前段のメッセージ
+	string id2 = 2; /// 合成する後段のメッセージ
+	string text = 3; /// 合成後のメッセージ
+}
+
+enum SettingType {
+	Integer = 0;
+	String = 1;
+	Float = 2;
+}
+
+message ConfigInfo {
+	string id = 1; /// ID
+	string value = 2; /// 値
+	SettingType type = 3; /// 型(int,string)
+	string spec = 4; /// 仕様書用説明
+}
+
+//===========================================
+// キャラクター
+//===========================================
+
+// デバッグメニュー
+//===========================================
+
+message DebugMenuInfo {
+	string name = 1;
+	string action = 2;
+	string shortcut = 4;
+	repeated DebugMenuInfo children = 3;
+}
+
+//===========================================
+// テストデータ
+//===========================================

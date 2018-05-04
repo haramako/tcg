@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+/**
+ * ゲームの進行メッセージ
+ *
+ * ゲームのマスターデータがなくても、GameLogのメッセージだけでゲームが再現できるようになっていなくてはならない。
+ */
+package GameLog;
+import "master.proto";
+

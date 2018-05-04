@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+# coding: utf-8
+# frozen_string_literal: true
+
+# コンバーター
+$LOAD_PATH << __dir__
+$LOAD_PATH << __dir__ + '/../RubyLib'
+$LOAD_PATH << __dir__ + '/../RubyLib/autogen'
+
+require 'xls_to_pb_converter'
+
+# TODO: protoファイルを指定できるようにする
+require 'master_pb'
+require 'game_log_pb'
+require 'game_pb'
+
+# コマンドラインで実行した場合は、実行する
+opt = { output: 'output', namespace: 'Master', logger: nil }
+op = OptionParser.new("XLS To PB Converter\nUsage:\n    $ ruby converter.rb [options ...] directory [...]\nOptions:")
+op.on('-o:', '--output', 'Output directory (default: output)') { |v| opt[:output] = v }
+op.on('-n:', '--namespace', 'Base namespace (default: Master)') { |v| opt[:namespace] = v }
+op.on('-d', '--debug', 'Show debug log') { opt[:logger] = Logger.new(STDOUT, level: Logger::Severity::DEBUG) }
+op.parse!
+
+opt[:namespace] = Kernel.const_get(opt[:namespace])
+
+converter = XlsToPbConverter.new(opt)
+
+ARGV.each do |target|
+  converter.convert_directory(target)
+end

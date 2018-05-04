@@ -1,0 +1,396 @@
+#!/usr/bin/env ruby
+# coding: utf-8
+# frozen_string_literal: true
+
+#
+# C#用コードジェネレータ
+#
+
+require 'pp'
+require 'open3'
+require 'active_support/inflector'
+
+module CsharpGenerator
+  class Nested
+    attr_reader :name
+    attr_reader :children
+
+    def initialize(name, *args)
+      @name = name
+      @children = []
+      init(*args)
+    end
+
+    def init(*args); end
+
+    def parse(&block)
+      instance_eval(&block) if block
+      self
+    end
+
+    def generate(out)
+      @children.each do |c|
+        c.generate(out)
+        out << ""
+      end
+    end
+  end
+
+  class Namespace < Nested
+    def initialize(name, *args)
+      super(name, *args)
+    end
+
+    def parse(&block)
+      super(&block)
+    end
+
+    def generate(out)
+      if @name && !@name.empty?
+        out << "namespace #{@name} {"
+        super(out)
+        out << "}"
+        out
+      else
+        super(out)
+      end
+    end
+
+    def cs_class(name, *args, &block)
+      @children << CsharpClass.new(name, *args).parse(&block)
+    end
+
+    def cabinet(name, *opt, &block)
+      @children << Cabinet.new(name, *opt).parse(&block)
+    end
+  end
+
+  class CsharpClass < Nested
+    def initialize(name, parents = [], *args)
+      super(name, *args)
+
+      if parents.is_a? Array
+        @parents = parents
+      else
+        @parents = [parents]
+      end
+
+      @partial = true
+      @dirty_flags = []
+    end
+
+    def readonly(type, name, *opt, &block)
+      @children << ReadOnly.new(name, type, *opt).parse(&block)
+    end
+
+    def property(name, type, *opt, &block)
+      property = Property.new(name, type, *opt).parse(&block)
+      if property.dirty && !@dirty_flags.include?(property.dirty)
+        @dirty_flags << property.dirty
+      end
+      @children << property
+    end
+
+    def generate(out)
+      parents_str = @parents.empty? ? '' : @parents.join(', ') + ' '
+      out << "public #{@partial ? 'partial ' : ' '}class #{@name} #{parents_str}{"
+      @dirty_flags.each do |flag|
+        out << "bool #{flag} = true;"
+      end
+      super(out)
+      out << "}"
+      out
+    end
+  end
+
+  class Property < Nested
+    attr_reader :dirty
+    def init(type, **opt)
+      opt ||= {}
+      @type = type
+      if opt[:dirty] == true
+        @dirty = :dirty_
+        @recalc = :Recalc
+      elsif opt[:dirty]
+        if opt[:dirty].is_a? Array
+          @dirty = opt[:dirty][0]
+          @recalc = opt[:dirty][1]
+        else
+          @dirty = opt[:dirty]
+          @recalc = :Recalc
+        end
+      end
+    end
+
+    def generate(out)
+      f = "#{@name}_"
+      out << "#{@type} #{f};"
+      out << "public #{@type} #{@name} {"
+      if @recalc && @dirty
+        out << "  get { if( #{@dirty} ){ #{@recalc}(); } return #{f}; }"
+      else
+        out << "  get { return #{f}; }"
+      end
+      if @writable
+        if @dirty
+          out << "  set { if( #{f} != value ){ #{@dirty} = true; #{f} = value } }"
+        else
+          out << "  set { #{f} = value }"
+        end
+      end
+      out << "}"
+      out
+    end
+  end
+
+  class Field < Nested
+  end
+
+  class ReadOnly < Nested
+    def init(type, *_opt)
+      @type = type
+    end
+
+    def generate(out)
+      f = "#{@name}_"
+      out << "public #{@type} #{f};"
+      out << "public #{@type} #{@name} {"
+      out << "get { return #{f}; }"
+      out << "set { #{f} = value; dirty_ = true;}"
+      out << "}"
+    end
+  end
+
+  #=================================================================
+  # cabinet
+  #=================================================================
+
+  class Cabinet < Nested
+    def init; end
+
+    def table(name, *opt, &block)
+      @children << Table.new(name, *opt).parse(&block)
+    end
+
+    def generate(out)
+      out << "public partial class #{@name} {"
+      super(out)
+
+      out << "public static void LoadAll(){"
+      @children.each do |c|
+        out << "load#{c.name}();" unless c.no_load
+      end
+      out << "loadOther();"
+      out << "}"
+
+      out << "public static void UnloadAll(){"
+      @children.each do |c|
+        out << "unload#{c.name}();" unless c.no_load
+      end
+      out << "unloadOther();"
+      out << "}"
+
+      out << "}"
+    end
+
+    class Table < Nested
+      attr_reader :no_load
+
+      def init(**opt)
+        opt ||= {}
+        @type = opt[:type] || @name
+        @keys = []
+        @keys << [:Id, :int, {}] unless opt[:no_index]
+        @groups = []
+        @on_loaded = nil
+        @no_load = opt[:no_load]
+      end
+
+      def index(key_name, key_type, **opt)
+        @keys << [key_name, key_type, opt || {}]
+      end
+
+      def group(key_name, key_type, **opt)
+        @groups << [key_name, key_type, opt || {}]
+      end
+
+      # rubocop: disable Style/TrivialAccessors
+      def on_loaded(method_name = 'OnLoaded')
+        @on_loaded = method_name
+      end
+      # rubocop: enable Style/TrivialAccessors
+
+      # rubocop: disable Metrics/MethodLength
+      def generate(out)
+        list = @name.to_s.pluralize # リスト
+        ro_list = 'readOnly' + list + '_'
+
+        # 取得系関数(Find***By***)を追加
+        out << "public static List< #{@type}> #{list}_ = new List<#{@type}> ();"
+        out << "static ReadOnlyCollection< #{@type}> #{ro_list};"
+        out << ""
+        out << "///<summary> #{@name} のリスト </summary>"
+        out << "public static ReadOnlyCollection< #{@type}> #{list} {get { return #{ro_list}; } }"
+        @keys.each do |key_name, key_type, opt|
+          if opt[:no_dict]
+            out << "/// <summary>#{@name} を #{key_name} で検索する（線形探索なので遅い）</summary>"
+            out << "[System.Diagnostics.DebuggerNonUserCode]"
+            out << "public static #{@type} Find#{@name}By#{key_name}(#{key_type} key_, bool errorIfNotFound = true){"
+            out << "var found = #{list}_.FirstOrDefault(i=>(i.#{key_name} == key_));"
+            out << "if( errorIfNotFound && found == null ){"
+            out << "    throw new Exception(\"#{@name} が見つかりません。 #{key_name} = \" + key_);"
+            out << "}"
+            out << "return found;"
+          else
+            dict = "#{@name}By#{key_name}_"
+            out << "static Dictionary<#{key_type}, #{@type}> #{dict} = new Dictionary<#{key_type}, #{@type}> ();"
+            out << "/// <summary>#{@name} を #{key_name} で検索する</summary>"
+            out << "[System.Diagnostics.DebuggerNonUserCode]"
+            out << "public static #{@type} Find#{@name}By#{key_name}(#{key_type} key_, bool errorIfNotFound = true){"
+            out << "#{@type} found;"
+            out << "if( #{dict}.TryGetValue(key_, out found) ){ "
+            out << "  return found; "
+            out << "} else { "
+            out << "  if( errorIfNotFound ){"
+            out << "    throw new Exception(\"#{@name} が見つかりません。 #{key_name} = \" + key_);"
+            out << "  }else{"
+            out << "    return null;"
+            out << "  }"
+            out << "}"
+          end
+          out << "}"
+        end
+
+        @groups.each do |key_name, key_type, _opt|
+          dict = "#{@name}By#{key_name}_"
+          out << "static Dictionary<#{key_type}, List<#{@type}>> #{dict} = new Dictionary<#{key_type}, List<#{@type}>> ();"
+          out << "/// <summary>#{@name} のリストを #{key_name} で検索する</summary>"
+          out << "[System.Diagnostics.DebuggerNonUserCode]"
+          out << "public static List<#{@type}> Find#{@name}By#{key_name}(#{key_type} key_, bool errorIfNotFound = true){"
+          out << "List<#{@type}> found;"
+          out << "if( #{dict}.TryGetValue(key_, out found) ){ "
+          out << "  return found; "
+          out << "} else { "
+          out << "  if( errorIfNotFound ){"
+          out << "    throw new Exception(\"#{@name} が見つかりません。 #{key_name} = \" + key_);"
+          out << "  }else{"
+          out << "    return new List<#{@type}>();"
+          out << "  }"
+          out << "}"
+          out << "}"
+        end
+
+        # ロード用関数(load***)を追加
+        out << "static void load#{@name}(){"
+        out << "#{list}_ = LoadPbFiles<#{@type}>(#{@type}.CreateInstance, \"#{@type}\");"
+        out << "#{ro_list} = #{list}_.AsReadOnly();"
+        if @on_loaded
+          out << "foreach( var x in #{list}_ ){ x.#{@on_loaded}(); }"
+        end
+
+        @keys.each do |key_name, key_type_, opt|
+          next if opt[:no_dict]
+          dict = "#{@name}By#{key_name}_"
+          out << "{"
+          out << "#{dict} = new Dictionary<#{key_type_}, #{@type}>();"
+          out << "  int len = #{list}.Count;"
+          out << "  for( int i = 0; i<len; i++){"
+          out << "    var obj = #{list}[i];"
+          out << "    if( obj.#{key_name} == default(#{key_type_}) ){ continue; }"
+          out << "    if( #{dict}.ContainsKey(obj.#{key_name}) ){"
+          out << "      Logger.Error(\"#{key_name}がかぶっています, Type=#{@type}, ID=\" + obj.#{key_name});"
+          out << "    }"
+          out << "    #{dict}.Add(obj.#{key_name}, obj);"
+          out << "  }"
+          out << "}"
+        end
+
+        @groups.each do |key_name, key_type_, _opt|
+          dict = "#{@name}By#{key_name}_"
+          out << "{"
+          out << "#{dict} = new Dictionary<#{key_type_}, List<#{@type}>>();"
+          out << "  int len = #{list}.Count;"
+          out << "  for( int i = 0; i<len; i++){"
+          out << "    var obj = #{list}[i];"
+          out << "    if( obj.#{key_name} == default(#{key_type_}) ){ continue; }"
+          out << "    List<#{@type}> list;"
+          out << "    if( !#{dict}.TryGetValue(obj.#{key_name}, out list) ){"
+          out << "      list = new List<#{@type}>();"
+          out << "      #{dict}.Add(obj.#{key_name}, list);"
+          out << "    }"
+          out << "    list.Add(obj);"
+          out << "  }"
+          out << "}"
+        end
+
+        out << "}"
+
+        # クリア用関数(unloadr***)を追加
+        out << "static void unload#{@name}(){"
+        out << "#{list}_ = null;"
+        out << "#{ro_list} = null;"
+        out << "}"
+      end
+      # rubocop: enable Metrics/MethodLength
+    end
+  end
+
+  module DSL
+    HEADER = <<-EOT
+      // Generated by the protocol buffer compiler.  DO NOT EDIT!
+      using System;
+      using System.Linq;
+      using System.Collections.Generic;
+      using System.Collections.ObjectModel;
+    EOT
+
+    if RUBY_PLATFORM =~ /darwin/
+      ASTYLE = __dir__ + '/../../Tools/Bin/AStyle'
+    else
+      ASTYLE = __dir__ + '/../../Tools/Bin/AStyle.exe'
+    end
+
+    def emit(str)
+      DSL.headers << str
+    end
+
+    def self.headers
+      @headers ||= []
+      @headers
+    end
+
+    def self.namespaces
+      @namespaces ||= []
+      @namespaces
+    end
+
+    def self.generate
+      out = []
+      out += headers
+      namespaces.each do |ns|
+        ns.generate(out)
+      end
+      src = out.join("\n")
+      src, stat = Open3.capture2("#{ASTYLE} --options=#{__dir__}/../../.astyle", stdin_data: src) # フォーマットする
+      if stat.exitstatus != 0
+        puts src
+        raise "atyle failed"
+      end
+      HEADER + src
+    end
+
+    def namespace(name, &block)
+      ns = Namespace.new(name)
+      DSL.namespaces << ns
+      ns.parse(&block)
+    end
+  end
+end
+
+if $PROGRAM_NAME == __FILE__
+  include CsharpGenerator::DSL
+  ARGV.each do |f|
+    load f
+  end
+  puts CsharpGenerator::DSL.generate
+end

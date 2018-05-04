@@ -1,0 +1,157 @@
+-
+  name: StartMenu
+  children:
+    #- {name: 通常起動, action: Start}
+    - {name: 初期化して起動, action: StartWithInitialize}
+    - {name: 接続系選択, action: SelectServer}
+    - {name: データクリア, action: DataClear}
+    - name: ダンジョン
+      children:
+        - {name: テストダンジョン開始, action: StartTestDungeon}
+        - {name: ダンジョン選択, action: StartDungeon}
+
+
+- name: Dungeon
+  children:
+    - {name: この階をリスタート, action: RestartStage, shortcut: F5}
+    - {name: リロード, action: ReloadStage, shortcut: Alpha5}
+    - name: ロードセーブ
+      children:
+        - {name: スロットを指定してロード, action: StateLoad}
+        - {name: スロットを指定してセーブ, action: StateSave}
+        - {name: 上書き保存, action: StateSaveLastSaved}
+        - {name: 最後にセーブしたのをロード, action: StateLoadLastSaved}
+        - {name: 初期化, action: StateInit}
+    - name: 移動
+      children:
+        - {name: ダンジョン選択, action: SelectDungeon}
+        - {name: 階選択, action: SelectFloor}
+        - {name: テストゲーム選択, action: SelectTestGame}
+        - {name: 次の階へ, action: NextFloor, shortcut: F6}
+    - name: 状態変化
+      children:
+        - {name: 無敵+千里眼(永遠), action: StatusOverrideSuper}
+        - {name: 透明+千里眼(永遠), action: StatusOverrideSuper2}
+        - {name: 無敵, action: StatusInvincible}
+        - {name: 千里眼, action: StatusViewAll}
+        - {name: 状態異常追加, action: AddStatusChange}
+        - {name: 状態異常クリア, action: ClearAllStatusChange}
+        - {name: 永遠状態異常のクリア, action: StatusOverrideClear}
+    - name: ステータス
+      children:
+        - {name: 全回復, action: CureAll}
+        - {name: HP全回復, action: HealHp, shortcut: F3}
+        - {name: レベルアップ, action: LevelUp, shortcut: F2}
+        - {name: スキル全チャージ, action: ChargeAllSkill, shortcut: F1}
+        - {name: 竜時100回復, action: HealTime, shortcut: F4}
+        - {name: ブレイブ増加, action: AddBrave, shortcut: F7}
+        - {name: 最大ブレイブ1増加, action: AddMaxBrave, shortcut: F8}
+    - name: デバッグアクション
+      children:
+        - {name: グロリアスアタック, action: KillOneEnemy, shortcut: Alpha1}
+        - {name: グロリアスヘブン, action: KillAllEnemy, shortcut: Alpha2}
+        - {name: ランダムワープ, action: WarpRandom, shortcut: Alpha3}
+        - {name: 矢を10本追加, action: AddArrow, shortcut: F9}
+    - name: 全スキル
+      children:
+      - {name: 基本スキル, action: UseBaseSkill}
+      - {name: 便利スキル, action: UseSkill}
+      - {name: エフェクト確認, action: EffectCheck}
+      - {name: モンスター作成, action: CreateMonster}
+      - {name: 岩作成, action: CreateStone}
+      - {name: エフェクトテスト, action: OtherEffectSkill}
+      - {name: エクスシアのスキル連打, action: EffectLoop}
+      - {name: 必ずソウルを発動させる, action: InvokeSoulalways}
+    - name: アイテム
+      children:
+      - {name: アイテム追加, action: AddItem}
+      - {name: 装備武器レベルアップ, action: LvUpWeapon}
+      - {name: 装備盾レベルアップ, action: LvUpShield}
+    - name: 表示
+      children:
+        - {name: キャラクタText, action: ShowCharacterText}
+        - {name: FPS表示切替, action: ShowFPS}
+    - name: 自動プレイ
+      children:
+        - {name: エージング開始, action: StartAging}
+        - {name: エージング速度, action: ChangeAgingSpeed}    
+        - {name: エージング停止, action: StopAging}   
+    - name: 実績
+      children:
+        - {name: 図鑑をリセット, action: ResetFangDic}
+        - {name: すべての実績をリセット, action: ResetAchievement}
+        - {name: 図鑑の内部情報, action: ShowLibraryCount}
+        - {name: チュートリアルをリセット, action: ResetTutorialDialog}
+    - {name: ドラマ, action: ShowAllDrama}
+    - name: その他
+      children:
+        - {name: 持ち物すべてを識別, action: RevealAll}
+        - {name: すべてを未識別, action: UnrevealAll}
+        - {name: すべてを呪われる, action: CurseAllItems}
+        - {name: デバッグメニュー無効, action: DisableDebugMenu}
+        - {name: 進行度変更, action: ChangeStoryProgress}
+        - {name: アイテムアンロック, action: ChangeUnlockProgress}
+        - {name: ファングビューワ, action: GoToFangViewer}
+        - {name: エフェクトビューワ, action: GoToEffectViewer}
+    - name: 原田テスト
+      children:
+        - {name: セーブデータをVer0に, action: SetHomeInfoAsOldVersion}
+        - {name: 最新のお知らせを表示するようにする, action: ShowLatestNews}
+        - {name: 原田テスト1, action: HaradaTest1}
+        - {name: 原田テスト2, action: HaradaTest2}
+        - {name: 原田テスト3, action: HaradaTest3}
+        - {name: 原田テスト4, action: HaradaTest4}
+        - {name: 原田テスト5, action: HaradaTest5}
+        - {name: ドラマテスト, action: DramaTest}
+        - {name: 入力テスト, action: ShowDebugAxisTestPage}
+        - {name: 影のON/OFF, action: ToggleShadow}
+        - {name: アプリの停止をエミュレート, action: ToggleApplicationPuaseEmulation}
+        - name: レコード
+          children:
+            - {name: レコード読み込み, action: LoadRecord}
+            - {name: 次のターン, action: NextRecordTurn}
+            - {name: 前のターン, action: PrevRecordTurn}
+            - {name: 10ターン進める, action: NextRecordTurn10}
+            - {name: 10ターン戻る, action: PrevRecordTurn10}
+    - name: 澤田テスト
+      children:
+        - {name: 強制プロローグ, action: AllClearAndPrologue}
+        - {name: 強制タイトル, action: GoTitle}
+        - {name: クイックヘルプテスト, action: QuickHelpTest}
+        - {name: Sawadaテスト1, action: SawadaTest1}
+    - name: 高原テスト
+      children:
+        - {name: 高原テスト1, action: TakaharaTest1}
+    - name: 有吉テスト
+      children:
+        - {name: 竜時-100, action: AriyoshiTest1}
+        - {name: 最大HP+100, action: AriyoshiTest2}
+    - name: 岡崎テスト
+      children:
+        - {name: アイテムランダム追加(20), action: AddRandomItem}
+        - {name: 妖精の箱庭, action: FairyDungeonSelectMenu}
+        - {name: 全画面ミニマップ, action: FullMapPage}
+        - {name: 言語テスト, action: TestLanguage}
+        - {name: メッセージを埋める, action: InnerMessageLog}
+        - {name: すべてを初期化, action: AllReset}
+        - {name: uid取得, action: GetUid}
+        - {name: NetworkServiceAccountid取得, action: GetNetworkServiceAccountId}
+        - {name: steam実績を初期化する, action: SteamAchievementClearAll}
+    - name: 廖テスト
+      children:
+        - {name: オートプレイ起動, action: RyuTest1}
+        - {name: 地図&部屋番号表示, action: RyuTest2}
+    - name: カエサルテスト
+      children:
+        - {name: オートプレイ起動Dungeon=11 floor1, action: KaserTest1}
+        - {name: 図鑑全解放, action: KaserTest2}
+        - {name: 矢充満, action: KaserTest3}
+        - {name: QuitOnError = false, action: KaserTest4}
+        - {name: 図鑑記録クリア, action: KaserTest5}
+        - {name: エフェクトビューワ2, action: KaserTest6}
+        - {name: 実績全解放, action: KaserTest7}
+        - {name: 実績クリア, action: KaserTest8}
+    - name: デザイナーテスト
+      children:
+        - {name: まーぼーテスト1, action: MableTest1}
+        - {name: にじテスト1, action: NijiTest1}

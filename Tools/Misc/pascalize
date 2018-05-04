@@ -1,0 +1,59 @@
+#!/usr/bin/env ruby
+# coding: utf-8
+# frozen_string_literal: true
+
+# ファイル名をパスカルケースに変換する
+
+require 'optparse'
+require 'fileutils'
+require 'find'
+require 'active_support/inflector'
+
+@tbl = []
+
+def search(path)
+  if File.directory?(path)
+    # ディレクトリの場合、再帰的に呼び出す
+    Find.find(path) do |f|
+      search f if File.file?(f)
+    end
+  else
+    # ファイルの場合
+    filename = File.basename(path, '.*').camelize
+    filename = filename.gsub(/(\d\w\d)/, &:upcase)
+    dir = File.dirname(path) + '/'
+    dir = '' if dir == './'
+    ext = File.extname(path)
+    new_path = dir + filename + ext
+    if path != new_path
+      puts 'convert %s => %s' % [path, new_path]
+      @tbl << [path, new_path]
+    end
+  end
+end
+
+def convert
+  @tbl.each do |path, new_path|
+    FileUtils.mv path, new_path + '-'
+    FileUtils.mv new_path + '-', new_path
+    # FileUtils.mv path, new_path
+  end
+end
+
+op = OptionParser.new("File Name To Camel Case\nUsage: ruby camelize <file or directory> [...]\nOptions:")
+op.on('--execute', 'execute') { @execute = true }
+op.parse!
+
+if ARGV.empty?
+  puts op.to_s
+  exit
+end
+
+ARGV.each do |path|
+  search path
+end
+
+if @execute
+  puts 'executing ...'
+  convert
+end

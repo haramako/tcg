@@ -1,0 +1,6 @@
+{
+	"cabinet": "s3://cfs-autotest",
+	"adminUser": "tdadmin",
+	"adminPass": "phi3zooJ",
+	"Compress": false
+}
