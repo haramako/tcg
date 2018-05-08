@@ -5,8 +5,8 @@ public partial class AssetBundleCreator
 {
 	static AssetBundleCreator()
 	{
-		RootPaths.Add("Assets/Gardens");
-		Rules.Add(new PathRule("Assets/Gardens/", 1));
+		RootPaths.Add("Assets/AssetBundles");
+		Rules.Add(new PathRule("Assets/AssetBundles/", 1));
 		AssetBundlePath = Path.Combine(Application.dataPath, "StreamingAssets");
 	}
 }

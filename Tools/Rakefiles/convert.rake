@@ -70,7 +70,8 @@ end
 # タスクリスト
 #===================================================
 
-task :default => [:map, :master, :lua, :other, :copy]
+# task :default => [:map, :master, :lua, :other, :copy]
+task :default => [:xls]
 
 task :clean do
   rm_rf [OUTPUT, TEMP, DATA_DIR + 'OutputPack']

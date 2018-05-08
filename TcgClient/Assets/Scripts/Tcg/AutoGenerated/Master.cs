@@ -618,6 +618,10 @@ namespace Master {
 
     public string Name = "";
 
+    public string Desc = "";
+
+    public int ImageId;
+
     #region Lite runtime methods
     #endregion
 
@@ -628,6 +632,12 @@ namespace Master {
       }
       if (Name != "") {
         output.WriteString(2, Name);
+      }
+      if (Desc != "") {
+        output.WriteString(3, Desc);
+      }
+      if (ImageId != 0) {
+        output.WriteInt32(4, ImageId);
       }
     }
 
@@ -644,6 +654,12 @@ namespace Master {
       }
       if (Name != "") {
         size += pb::CodedOutputStream.ComputeStringSize(2, Name);
+      }
+      if (Desc != "") {
+        size += pb::CodedOutputStream.ComputeStringSize(3, Desc);
+      }
+      if (ImageId != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(4, ImageId);
       }
       return size;
     }
@@ -675,6 +691,14 @@ namespace Master {
           }
           case 18: {
             input.ReadString(ref this.Name);
+            break;
+          }
+          case 26: {
+            input.ReadString(ref this.Desc);
+            break;
+          }
+          case 32: {
+            input.ReadInt32(ref this.ImageId);
             break;
           }
         }

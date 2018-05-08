@@ -14,7 +14,6 @@ namespace :Game do
     table :MessageFusion, no_index: true, no_load: true do
       index :Id1, :string, no_dict: true
     end
-
   end
 end
 

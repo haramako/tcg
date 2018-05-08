@@ -28,6 +28,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   add_message "Master.CardTemplate" do
     optional :id, :int32, 1
     optional :name, :string, 2
+    optional :desc, :string, 3
+    optional :image_id, :int32, 4
   end
   add_message "Master.DebugMenuInfo" do
     optional :name, :string, 1

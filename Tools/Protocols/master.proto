@@ -67,6 +67,8 @@ enum PlatformType {
 message CardTemplate {
 	int32 id = 1;
 	string name = 2;
+	string desc = 3;
+	int32 image_id = 4;
 }
 
 //===========================================

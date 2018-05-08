@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 04c02019e3c0873408d154a7c5ecb5f6
+timeCreated: 1525807904
+licenseType: Pro
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 32
+  forceTextureCase: -1
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: FOT-UDMarugo_Large Pro
+  fontNames:
+  - FOT-UDMarugo_Large Pro
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
