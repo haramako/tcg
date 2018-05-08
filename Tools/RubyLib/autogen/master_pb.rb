@@ -25,6 +25,10 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     optional :type, :enum, 3, "Master.SettingType"
     optional :spec, :string, 4
   end
+  add_message "Master.CardTemplate" do
+    optional :id, :int32, 1
+    optional :name, :string, 2
+  end
   add_message "Master.DebugMenuInfo" do
     optional :name, :string, 1
     optional :action, :string, 2
@@ -36,6 +40,13 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     value :String, 1
     value :Float, 2
   end
+  add_enum "Master.PlatformType" do
+    value :Windows, 0
+    value :Switch, 1
+    value :Ps4, 2
+    value :Wsa, 3
+    value :Steam, 4
+  end
 end
 
 module Master
@@ -43,6 +54,8 @@ module Master
   I18nMessage = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.I18nMessage").msgclass
   MessageFusion = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.MessageFusion").msgclass
   ConfigInfo = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.ConfigInfo").msgclass
+  CardTemplate = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.CardTemplate").msgclass
   DebugMenuInfo = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.DebugMenuInfo").msgclass
   SettingType = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.SettingType").enummodule
+  PlatformType = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.PlatformType").enummodule
 end

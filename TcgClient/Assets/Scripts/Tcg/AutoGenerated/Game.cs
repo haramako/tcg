@@ -12,6 +12,92 @@ namespace Game {
   public static partial class Game {
 
   }
+  #region Messages
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class Card : pb.Message {
+    public Card() { }
+    public static Card CreateInstance() { var obj = new Card(); obj.Finish(); return obj; }
+    public static Card CreateEmpty() { return new Card(); }
+    private static readonly Card defaultInstance = new Card();
+    public static Card DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    public int Id;
+
+    public int CardTemplateId;
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+      if (Id != 0) {
+        output.WriteInt32(1, Id);
+      }
+      if (CardTemplateId != 0) {
+        output.WriteInt32(2, CardTemplateId);
+      }
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      if (Id != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(1, Id);
+      }
+      if (CardTemplateId != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(2, CardTemplateId);
+      }
+      return size;
+    }
+    public static Card ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static Card ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static Card ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+          case 8: {
+            input.ReadInt32(ref this.Id);
+            break;
+          }
+          case 16: {
+            input.ReadInt32(ref this.CardTemplateId);
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    }
+  }
+
+  #endregion
+
 }
 
 #endregion Designer generated code

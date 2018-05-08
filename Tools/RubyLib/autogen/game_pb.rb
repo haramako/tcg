@@ -5,7 +5,12 @@ require 'google/protobuf'
 
 require 'master_pb'
 Google::Protobuf::DescriptorPool.generated_pool.build do
+  add_message "Game.Card" do
+    optional :id, :int32, 1
+    optional :card_template_id, :int32, 2
+  end
 end
 
 module Game
+  Card = Google::Protobuf::DescriptorPool.generated_pool.lookup("Game.Card").msgclass
 end

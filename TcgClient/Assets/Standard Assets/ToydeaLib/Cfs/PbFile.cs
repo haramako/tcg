@@ -1,5 +1,4 @@
-﻿#if false
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,7 +6,7 @@ using Google.ProtocolBuffers;
 
 public class PbFile
 {
-public static byte[] buf = new byte[1024 * 1024];
+	public static byte[] buf = new byte[1024 * 1024];
 
 	public static IEnumerable<T> ReadPbList<T>(Func<T> constructor, byte[] buf, int offset = 0, int len = -1) where T: Message
 	{
@@ -40,4 +39,3 @@ public static byte[] buf = new byte[1024 * 1024];
 	}
 
 }
-#endif
