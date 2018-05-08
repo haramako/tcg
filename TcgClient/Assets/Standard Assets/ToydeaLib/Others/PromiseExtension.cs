@@ -162,7 +162,7 @@ namespace RSG
 		/// </summary>
 		public static IPromise AsPromise(this IEnumerator coro)
 		{
-			return Worker.Instance.StartCoroutine(coro).AsPromise().Then(_ => Promise.Resolved());
+			return Worker.Instance.StartCoroutine(coro).AsPromise().Then(() => Promise.Resolved());
 		}
 
 		/// <summary>
@@ -172,17 +172,17 @@ namespace RSG
 		///    var wait = new WaitForSeconds(3.0f);
 		///    wait.AsPromise().Done(_=>{ Debug.Log("finish!"); });
 		/// </summary>
-		public static IPromise<T> AsPromise<T>(this T ao) where T: YieldInstruction
+		public static IPromise AsPromise<T>(this T ao) where T: YieldInstruction
 		{
-			var promise = new Promise<T>();
+			var promise = new Promise();
 			Worker.Instance.StartCoroutine(asPromiseCoroutine(promise, ao));
 			return promise;
 		}
 
-		static IEnumerator asPromiseCoroutine<T>(Promise<T> promise, T ao) where T: YieldInstruction
+		static IEnumerator asPromiseCoroutine<T>(Promise promise, T ao) where T: YieldInstruction
 		{
 			yield return ao;
-			promise.Resolve (ao);
+			promise.Resolve ();
 		}
 
 		public static IPromise Resolved()

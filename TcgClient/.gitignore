@@ -1,10 +1,5 @@
 /Library
 /Temp
-
-*.sln
-*.suo
+/.vs
 *.csproj
-*.userprefs
-
-/tcg
-/*.app
+*.sln
