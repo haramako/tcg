@@ -27,11 +27,10 @@ namespace :doc do
       # See: http://qiita.com/knaka/items/48e1799b56d520af6a09
       sh 'rsync --iconv=UTF8-MAC,UTF-8 -avz Doc/_site/ tdadmin@133.242.235.150:/home/tdadmin/doggie-ninja/'
     else
-      sh 'rsync -avz Doc/_site/ tdadmin@133.242.235.150:/home/tdadmin/doggie-ninja/'
+      sh 'rsync -avz Doc/_site/ tdadmin@133.242.235.150:/home/tdadmin/tcg/'
     end
   end
 
   desc 'ドキュメントをtddl01にアップロードする'
-  # task :all => [:'doc:jekyll', :'doc:doxygen', :'doc:proto', :upload]
-  task all: %i[doc:jekyll upload]
+  task :all => [:'doc:jekyll', :'doc:doxygen', :'doc:proto', :upload]
 end

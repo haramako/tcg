@@ -23,44 +23,44 @@ class PbConverter
     list = @field_of_index_cache[class_]
     unless list
       list = []
-      _class.descriptor.each do |desc|
+      class_.descriptor.each do |desc|
         list[desc.number] = desc
       end
-      @field_of_index_cache[_class] = list
+      @field_of_index_cache[class_] = list
     end
     list[index]
   end
 
   def conv_message(class_, data)
-    m = _class.new
+    m = class_.new
 
     conv_message_hook(class_, data)
 
     data.each do |k, v|
       begin
-        k, v = conv_field_name(_class, k, v)
+        k, v = conv_field_name(class_, k, v)
         k = k.to_s
 
         # 数字のインデックスが来た場合は、名前に変換する
         if k =~ /^\d+$/
-          desc = field_of_index(_class, k.to_i + 1)
+          desc = field_of_index(class_, k.to_i + 1)
           unless desc
-            logger.warn "#{_class.name} に #{k} が存在しません"
+            @logger.warn "#{class_.name} に #{k} が存在しません"
             break
           end
           k = desc.name
         end
 
-        desc = _class.descriptor.lookup(k)
+        desc = class_.descriptor.lookup(k)
         if desc
           conv_field(m, desc, k, v)
         else
-          logger.warn "#{_class.name} に #{k} が存在しません"
+          @logger.warn "#{class_.name} に #{k} が存在しません"
         end
       rescue
-        logger.error "コンバートできません #{_class}.#{k} = #{v}"
-        logger.error data
-        logger.error $ERROR_INFO.to_s
+        @logger.error "コンバートできません #{class_}.#{k} = #{v}"
+        @logger.error data
+        @logger.error $!.to_s
         # raise
       end
     end
@@ -83,7 +83,7 @@ class PbConverter
         v2 = conv_type(desc, v)
         desc.set m, v2
       rescue RangeError
-        logger.error "#{v} は #{desc.name} の値として不正です。"
+        @logger.error "#{v} は #{desc.name} の値として不正です。"
         raise
       end
     end
