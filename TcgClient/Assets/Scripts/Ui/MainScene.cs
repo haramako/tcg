@@ -40,4 +40,9 @@ public class MainScene : MonoBehaviour
 		}
 	}
 
+	public void OnCardClick()
+	{
+		Debug.Log("HOGE");
+	}
+
 }
