@@ -129,12 +129,16 @@ namespace Game
 			return AllCards.FirstOrDefault(c => c.Id == cardId);
 		}
 
-		public void AddCard(Card card)
+		public Card StackTop() => stack_[stack_.Count - 1];
+		public bool HasStack() => stack_.Count > 0;
+
+		public Card AddCard(Card card)
 		{
 			allCards_.Add(card);
 			card.Id = nextCardId_;
 			nextCardId_++;
 			card.place_ = CardPlace.Temp;
+			return card;
 		}
 
 		public void AddCards(IEnumerable<Card> cards)

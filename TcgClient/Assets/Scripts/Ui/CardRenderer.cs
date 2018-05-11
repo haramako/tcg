@@ -12,13 +12,24 @@ public class CardRenderer : MonoBehaviour
 
 	public void Redraw(Card card)
 	{
-		NameText.text = card.T.Name;
-		DescText.text = card.T.Desc;
-		var spriteName = string.Format("{0:D4}", card.T.ImageId);
-		ResourceCache.Load<Sprite>(spriteName).Done(spr =>
+		gameObject.name = "Card:" + card.Id;
+
+		if (card.Reversed)
 		{
-			CardImage.sprite = spr;
-		});
+			NameText.text = "";
+			DescText.text = "";
+			CardImage.sprite = null;
+		}
+		else
+		{
+			NameText.text = card.T.Name;
+			DescText.text = card.T.Desc;
+			var spriteName = string.Format("{0:D4}", card.T.ImageId);
+			ResourceCache.Load<Sprite>(spriteName).Done(spr =>
+			{
+				CardImage.sprite = spr;
+			});
+		}
 	}
 
 }

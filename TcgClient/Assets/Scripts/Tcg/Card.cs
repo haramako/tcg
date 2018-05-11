@@ -37,6 +37,14 @@ namespace Game
 		/// カードがおいてある場所
 		/// </summary>
 		public CardPlace Place => place_;
+
+
+		public bool IsHands => place_ == CardPlace.Hands;
+		public bool IsStack => place_ == CardPlace.Stack;
+		public bool IsOpened => place_ == CardPlace.Opened;
+		public bool IsTemp => place_ == CardPlace.Temp;
+
+		public bool Reversed;
 	}
 
 }

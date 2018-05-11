@@ -6,17 +6,17 @@ namespace Game
 {
 	public static class Playing
 	{
-		/*
-		public void Play(Field f, int cardId)
+		static public void Play(Field f, Card card)
 		{
-		    var card = f.FindFromHands(cardId);
-		    f.RawHands.Remove(card);
+			Logger.Assert(card.IsHands);
+			f.MoveToOpened(card);
 		}
 
-		public void Draw(Field f)
+		static public void Draw(Field f)
 		{
-			var card = f.RawStack;
+			Logger.Assert(f.Stack.Count > 0);
+		    var card = f.StackTop();
+			f.MoveToHands(card);
 		}
-		*/
 	}
 }
