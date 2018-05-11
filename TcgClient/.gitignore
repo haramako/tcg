@@ -1,5 +1,7 @@
 /Library
 /Temp
 /.vs
+/obj
 *.csproj
 *.sln
+*.userprefs

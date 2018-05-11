@@ -212,7 +212,7 @@ public partial class AssetBundleCreator : AssetPostprocessor
 			case BuildTarget.StandaloneWindows:
 			case BuildTarget.StandaloneWindows64:
 				return "StandaloneWindows64";
-			case BuildTarget.StandaloneOSXUniversal:
+			case BuildTarget.StandaloneOSX:
 			case BuildTarget.StandaloneOSXIntel:
 			case BuildTarget.StandaloneOSXIntel64:
 				return "StandaloneOSXIntel64";

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Game;
 using Master;
+using System.IO;
 
 public class MainScene : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class MainScene : MonoBehaviour
 		Configure.Init();
 		ResourceCache.Init();
 
-		G.Initialize(new LocalFileSystem("..\\Output"));
+		G.Initialize(new LocalFileSystem(Path.Combine("..", "Output")));
 		G.LoadAll();
 
 		for( int i = 0; i < 10; i++)
@@ -42,7 +43,6 @@ public class MainScene : MonoBehaviour
 
 	public void OnCardClick()
 	{
-		Debug.Log("HOGE");
 	}
 
 }

@@ -5,6 +5,13 @@ using Master;
 
 namespace Game
 {
+	public enum CardPlace
+	{
+		Temp,
+		Hands,
+		Stack,
+		Opened,
+	};
 
 	public partial class Card
 	{
@@ -21,6 +28,15 @@ namespace Game
 			}
 		}
 
+		/// <summary>
+		/// カードがおいてある場所(Field以外からアクセスしてはいけない)
+		/// </summary>
+		public CardPlace place_;
+
+		/// <summary>
+		/// カードがおいてある場所
+		/// </summary>
+		public CardPlace Place => place_;
 	}
 
 }
