@@ -197,6 +197,10 @@ namespace Game
 			card.place_ = CardPlace.Temp;
 		}
 
+		//===================================================
+        // バリデーション
+        //===================================================
+
 		/// <summary>
 		/// 場の状態が正しいかを確認する
 		/// </summary>
@@ -215,7 +219,7 @@ namespace Game
 			{
 				if (card.Place != CardPlace.Stack)
 				{
-					throw new Exception(string.Format("Card {0} must in hand, but not found", card.Id));
+					throw new Exception(string.Format("Card {0} must in stack, but not found", card.Id));
 				}
 			}
 
@@ -223,7 +227,7 @@ namespace Game
 			{
 				if (card.Place != CardPlace.Opened)
 				{
-					throw new Exception(string.Format("Card {0} must in hand, but not found", card.Id));
+					throw new Exception(string.Format("Card {0} must in opened, but not found", card.Id));
 				}
 			}
 

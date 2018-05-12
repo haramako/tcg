@@ -10,8 +10,11 @@ public class CardRenderer : MonoBehaviour
 	public Text NameText;
 	public Text DescText;
 
+	public Card Card { get; private set; }
+
 	public void Redraw(Card card)
 	{
+		Card = card;
 		gameObject.name = "Card:" + card.Id;
 
 		if (card.Reversed)

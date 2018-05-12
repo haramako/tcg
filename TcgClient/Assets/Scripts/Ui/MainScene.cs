@@ -69,7 +69,10 @@ public class MainScene : MonoBehaviour
 			var cr = FindCardRenderer(card);
 			var pos = GetCardPosition(HandHolder, Field.Hands.Count, i);
 			cr.gameObject.SetActive(true);
+			cr.gameObject.transform.SetAsLastSibling();
 			cr.transform.DOLocalMove(pos, 0.3f);
+			card.Reversed = false;
+			cr.Redraw(cr.Card);
 			i++;
 		}
 
@@ -80,6 +83,9 @@ public class MainScene : MonoBehaviour
             var pos = GetCardPosition(OpenedHolder, Field.Opened.Count, i);
 			cr.gameObject.SetActive(true);
 			cr.transform.DOLocalMove(pos, 0.3f);
+			cr.gameObject.transform.SetAsLastSibling();
+			card.Reversed = false;
+			cr.Redraw(cr.Card);
             i++;
         }
 
@@ -90,7 +96,10 @@ public class MainScene : MonoBehaviour
 			if (i == Field.Stack.Count - 1)
 			{
 				cr.gameObject.SetActive(true);
+				card.Reversed = true;
 				cr.transform.localPosition = StackHolder.transform.localPosition;
+				cr.gameObject.transform.SetAsLastSibling();
+				cr.Redraw(cr.Card);
 			}
 			else
 			{
@@ -115,6 +124,7 @@ public class MainScene : MonoBehaviour
 				break;
 		}
 		redrawCards();
+		UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
 	}
 
 	int CardWidth = 120;
