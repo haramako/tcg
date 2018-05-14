@@ -38,7 +38,7 @@ public partial class Browser : MonoSingleton<Browser>
 	{
 		listener_ = Listener.GetComponent<IPageListener>();
 		Fader.gameObject.SetActive(true);
-		GameObject.DontDestroyOnLoad(UiCamera.gameObject);
+		//GameObject.DontDestroyOnLoad(UiCamera.gameObject);
 		base.Awake();
 	}
 

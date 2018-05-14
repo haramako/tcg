@@ -622,6 +622,8 @@ namespace Master {
 
     public int ImageId;
 
+    public int Cost;
+
     #region Lite runtime methods
     #endregion
 
@@ -638,6 +640,9 @@ namespace Master {
       }
       if (ImageId != 0) {
         output.WriteInt32(4, ImageId);
+      }
+      if (Cost != 0) {
+        output.WriteInt32(5, Cost);
       }
     }
 
@@ -660,6 +665,9 @@ namespace Master {
       }
       if (ImageId != 0) {
         size += pb::CodedOutputStream.ComputeInt32Size(4, ImageId);
+      }
+      if (Cost != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(5, Cost);
       }
       return size;
     }
@@ -699,6 +707,10 @@ namespace Master {
           }
           case 32: {
             input.ReadInt32(ref this.ImageId);
+            break;
+          }
+          case 40: {
+            input.ReadInt32(ref this.Cost);
             break;
           }
         }

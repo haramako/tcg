@@ -10,6 +10,7 @@ namespace Game
 		Temp,
 		Hands,
 		Stack,
+        Grave,
 		Opened,
 	};
 
@@ -41,6 +42,7 @@ namespace Game
 
 		public bool IsHands => place_ == CardPlace.Hands;
 		public bool IsStack => place_ == CardPlace.Stack;
+		public bool IsGrave => place_ == CardPlace.Grave;
 		public bool IsOpened => place_ == CardPlace.Opened;
 		public bool IsTemp => place_ == CardPlace.Temp;
 

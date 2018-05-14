@@ -11,3 +11,9 @@ message Card {
     int32 id = 1;
     int32 card_template_id = 2;
 }
+
+message FieldInfo {
+	int32 hp = 1; /// HP
+	int32 power = 2; /// 行動力
+	int32 turn = 3; /// ターン
+}

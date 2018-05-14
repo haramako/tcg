@@ -30,9 +30,18 @@ namespace Game
 		public IReadOnlyList<Card> Stack => RawStack;
 
 		/// <summary>
+        /// 墓
+        ///
+        /// インデックスは[0]は墓の底で、[Count-1]が墓の頭を表す
+        /// </summary>
+        public IReadOnlyList<Card> Grave => RawGrave;
+
+		/// <summary>
 		/// オープンされたカード
 		/// </summary>
 		public IReadOnlyList<Card> Opened => RawOpened;
+
+		public FieldInfo FieldInfo;
 
 		/// <summary>
 		/// 手札(編集用のアクセスが必要な時のみ使用して、基本は使わない)
@@ -43,6 +52,11 @@ namespace Game
 		/// 山札(編集用のアクセスが必要な時のみ使用して、基本は使わない)
 		/// </summary>
 		List<Card> RawStack => stack_;
+
+		/// <summary>
+        /// 墓札(編集用のアクセスが必要な時のみ使用して、基本は使わない)
+        /// </summary>
+        List<Card> RawGrave => grave_;
 
 		/// <summary>
 		/// オープンされたカード(編集用のアクセスが必要な時のみ使用して、基本は使わない)
@@ -57,6 +71,7 @@ namespace Game
 
 		List<Card> hands_ = new List<Card>();
 		List<Card> stack_ = new List<Card>();
+		List<Card> grave_ = new List<Card>();
 		List<Card> opened_ = new List<Card>();
 
 		/// <summary>
@@ -66,7 +81,10 @@ namespace Game
 
 		public Field()
 		{
-
+			FieldInfo = new FieldInfo
+			{
+				Hp = 20,
+			};
 		}
 
 		//===================================================
@@ -84,6 +102,9 @@ namespace Game
 				case CardPlace.Stack:
 					removed = stack_.Remove(card);
 					break;
+				case CardPlace.Grave:
+                    removed = grave_.Remove(card);
+                    break;
 				case CardPlace.Opened:
 					removed = opened_.Remove(card);
 					break;
@@ -184,6 +205,13 @@ namespace Game
 		public void MoveToStackTop(Card card) => MoveToStack(card);
 		public void MoveToStackBottom(Card card) => MoveToStack(card, 0);
 
+		public void MoveToGrave(Card card, int idx = -1)
+        {
+            removeCard(card);
+            insert(grave_, card, idx);
+            card.place_ = CardPlace.Grave;
+        }
+
 		public void MoveToOpened(Card card, int idx = -1)
 		{
 			removeCard(card);
@@ -222,6 +250,14 @@ namespace Game
 					throw new Exception(string.Format("Card {0} must in stack, but not found", card.Id));
 				}
 			}
+
+			foreach (var card in grave_)
+            {
+                if (card.Place != CardPlace.Grave)
+                {
+                    throw new Exception(string.Format("Card {0} must in grave, but not found", card.Id));
+                }
+            }
 
 			foreach (var card in opened_)
 			{

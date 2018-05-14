@@ -30,6 +30,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     optional :name, :string, 2
     optional :desc, :string, 3
     optional :image_id, :int32, 4
+    optional :cost, :int32, 5
   end
   add_message "Master.DebugMenuInfo" do
     optional :name, :string, 1

@@ -1,8 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using RSG;
 
-public class CommonDialog
+public class CommonDialog : MonoBehaviour
 {
+	public Text MessageText;
+	public Button[] Buttons;
+
+	Promise<int> onClose_ = new Promise<int>();
+	
 	/// <summary>
 	/// エラーダイアログ
 	/// </summary>
@@ -10,8 +16,21 @@ public class CommonDialog
 	/// <returns></returns>
 	public static IPromise<int> Open(string message)
 	{
-		// @todo 仮コード
-		Debug.LogError(message);
-		return Promise<int>.Resolved(0);
+		return ResourceCache.Create<GameObject>("CommonDialog")
+					 .WithScreenLock()
+					 .Then(obj =>
+	   {
+		   var dialog = obj.GetComponent<CommonDialog>();
+		   dialog.MessageText.text = message;
+		   ScreenLocker.Modal(obj);
+			return (IPromise<int>)dialog.onClose_;
+	   });
+	}
+
+	public void OnButonClick(GameObject target)
+	{
+		var id = target.GetId();
+		onClose_.Resolve(id);
+		ScreenLocker.Unmodal(gameObject);
 	}
 }

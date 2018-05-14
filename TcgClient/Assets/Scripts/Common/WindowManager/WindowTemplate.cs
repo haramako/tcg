@@ -31,9 +31,13 @@ public class WindowTemplate : MonoBehaviour
 	}
 	#endif
 
-	void Awake()
+	void Update()
 	{
-		if (Application.isPlaying && ResourceCache.HasInstance)
+		if( !Application.isPlaying ){
+			return;
+		}
+		
+		if (ResourceCache.HasInstance)
 		{
 			try
 			{
@@ -47,6 +51,11 @@ public class WindowTemplate : MonoBehaviour
 			{
 				Debug.LogException(ex);
 			}
+			Destroy(gameObject);
+		}
+		else
+		{
+			Debug.LogWarning("ResourceCache not initialized");
 		}
 	}
 

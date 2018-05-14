@@ -96,6 +96,101 @@ namespace Game {
     }
   }
 
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class FieldInfo : pb.Message {
+    public FieldInfo() { }
+    public static FieldInfo CreateInstance() { var obj = new FieldInfo(); obj.Finish(); return obj; }
+    public static FieldInfo CreateEmpty() { return new FieldInfo(); }
+    private static readonly FieldInfo defaultInstance = new FieldInfo();
+    public static FieldInfo DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    public int Hp;
+
+    public int Power;
+
+    public int Turn;
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+      if (Hp != 0) {
+        output.WriteInt32(1, Hp);
+      }
+      if (Power != 0) {
+        output.WriteInt32(2, Power);
+      }
+      if (Turn != 0) {
+        output.WriteInt32(3, Turn);
+      }
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      if (Hp != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(1, Hp);
+      }
+      if (Power != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(2, Power);
+      }
+      if (Turn != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(3, Turn);
+      }
+      return size;
+    }
+    public static FieldInfo ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static FieldInfo ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static FieldInfo ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+          case 8: {
+            input.ReadInt32(ref this.Hp);
+            break;
+          }
+          case 16: {
+            input.ReadInt32(ref this.Power);
+            break;
+          }
+          case 24: {
+            input.ReadInt32(ref this.Turn);
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    }
+  }
+
   #endregion
 
 }

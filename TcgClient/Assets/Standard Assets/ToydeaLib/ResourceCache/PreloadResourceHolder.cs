@@ -10,7 +10,6 @@ public partial class PreloadResourceHolder : MonoBehaviour
 	{
 		var obj = new GameObject("PreloadResourceHolder");
 		Object.DontDestroyOnLoad(obj);
-		//obj.hideFlags = HideFlags.HideAndDontSave; // MEMO: シーンにゴミとして残って、保存されてしまう可能性があるので、保存されないようにする
 		instance_ = obj.AddComponent<PreloadResourceHolder>();
 	}
 

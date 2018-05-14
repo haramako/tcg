@@ -14,17 +14,24 @@ public class MainScene : MonoBehaviour
 
 	public Graphic HandHolder;
 	public Graphic StackHolder;
+	public Graphic GraveHolder;
 	public Graphic OpenedHolder;
+
+	public Text StackNumText;
+	public Text GraveNumText;
 
 	public Field Field;
 
 	public Dictionary<int, CardRenderer> cardRenderers_ = new Dictionary<int, CardRenderer>();
 
-	void Start ()
+	private void Awake()
 	{
 		Configure.Init();
-		ResourceCache.Init();
+        ResourceCache.Init();
+	}
 
+	void Start ()
+	{
 		G.Initialize(new LocalFileSystem(Path.Combine("..", "Output")));
 		G.LoadAll();
 
@@ -39,7 +46,7 @@ public class MainScene : MonoBehaviour
 			Field.MoveToStack(AddCardToField(randCard()));
 		}
 
-		redrawCards(); 
+		redraw(); 
 	}
 
 	Card randCard()
@@ -60,6 +67,14 @@ public class MainScene : MonoBehaviour
 
 	public CardRenderer FindCardRenderer(Card card) => cardRenderers_[card.Id];
 	public CardRenderer FindCardRenderer(int cardId) => cardRenderers_[cardId];
+
+	void redraw()
+	{
+		redrawCards();
+
+		StackNumText.text = "" + Field.Stack.Count;
+		GraveNumText.text = "" + Field.Grave.Count;
+	}
 
 	void redrawCards()
 	{
@@ -107,6 +122,25 @@ public class MainScene : MonoBehaviour
 			}
             i++;
         }
+
+		i = 0;
+        foreach (var card in Field.Grave)
+        {
+            var cr = FindCardRenderer(card);
+            if (i == Field.Grave.Count - 1)
+            {
+                cr.gameObject.SetActive(true);
+                card.Reversed = true;
+                cr.transform.localPosition = GraveHolder.transform.localPosition;
+                cr.gameObject.transform.SetAsLastSibling();
+                cr.Redraw(cr.Card);
+            }
+            else
+            {
+                cr.gameObject.SetActive(false);
+            }
+            i++;
+        }
 	}
 
 	public void OnCardClick(GameObject target)
@@ -123,8 +157,13 @@ public class MainScene : MonoBehaviour
 			default:
 				break;
 		}
-		redrawCards();
+		redraw();
 		UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
+	}
+
+	public void OnButtonClick()
+	{
+		CommonDialog.Open("HOGE?").Done(n => Debug.Log("Done " + n));
 	}
 
 	int CardWidth = 120;
