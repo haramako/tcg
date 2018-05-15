@@ -33,10 +33,11 @@ public class WindowTemplate : MonoBehaviour
 
 	void Update()
 	{
-		if( !Application.isPlaying ){
+		if( !Application.isPlaying )
+		{
 			return;
 		}
-		
+
 		if (ResourceCache.HasInstance)
 		{
 			try

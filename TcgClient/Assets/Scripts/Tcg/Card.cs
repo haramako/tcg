@@ -10,7 +10,7 @@ namespace Game
 		Temp,
 		Hands,
 		Stack,
-        Grave,
+		Grave,
 		Opened,
 	};
 

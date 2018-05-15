@@ -8,7 +8,7 @@ public class CommonDialog : MonoBehaviour
 	public Button[] Buttons;
 
 	Promise<int> onClose_ = new Promise<int>();
-	
+
 	/// <summary>
 	/// エラーダイアログ
 	/// </summary>
@@ -17,14 +17,14 @@ public class CommonDialog : MonoBehaviour
 	public static IPromise<int> Open(string message)
 	{
 		return ResourceCache.Create<GameObject>("CommonDialog")
-					 .WithScreenLock()
-					 .Then(obj =>
-	   {
-		   var dialog = obj.GetComponent<CommonDialog>();
-		   dialog.MessageText.text = message;
-		   ScreenLocker.Modal(obj);
+			   .WithScreenLock()
+			   .Then(obj =>
+		{
+			var dialog = obj.GetComponent<CommonDialog>();
+			dialog.MessageText.text = message;
+			ScreenLocker.Modal(obj);
 			return (IPromise<int>)dialog.onClose_;
-	   });
+		});
 	}
 
 	public void OnButonClick(GameObject target)

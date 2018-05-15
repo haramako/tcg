@@ -30,11 +30,11 @@ namespace Game
 		public IReadOnlyList<Card> Stack => RawStack;
 
 		/// <summary>
-        /// 墓
-        ///
-        /// インデックスは[0]は墓の底で、[Count-1]が墓の頭を表す
-        /// </summary>
-        public IReadOnlyList<Card> Grave => RawGrave;
+		/// 墓
+		///
+		/// インデックスは[0]は墓の底で、[Count-1]が墓の頭を表す
+		/// </summary>
+		public IReadOnlyList<Card> Grave => RawGrave;
 
 		/// <summary>
 		/// オープンされたカード
@@ -42,6 +42,11 @@ namespace Game
 		public IReadOnlyList<Card> Opened => RawOpened;
 
 		public FieldInfo FieldInfo;
+
+		/// <summary>
+		/// スレッド間の通信を行う
+		/// </summary>
+		public FieldConnection Conn;
 
 		/// <summary>
 		/// 手札(編集用のアクセスが必要な時のみ使用して、基本は使わない)
@@ -54,9 +59,9 @@ namespace Game
 		List<Card> RawStack => stack_;
 
 		/// <summary>
-        /// 墓札(編集用のアクセスが必要な時のみ使用して、基本は使わない)
-        /// </summary>
-        List<Card> RawGrave => grave_;
+		/// 墓札(編集用のアクセスが必要な時のみ使用して、基本は使わない)
+		/// </summary>
+		List<Card> RawGrave => grave_;
 
 		/// <summary>
 		/// オープンされたカード(編集用のアクセスが必要な時のみ使用して、基本は使わない)
@@ -85,6 +90,8 @@ namespace Game
 			{
 				Hp = 20,
 			};
+			Conn = new FieldConnection(this);
+			Conn.RequestTimeoutMillis = 1000;
 		}
 
 		//===================================================
@@ -103,8 +110,8 @@ namespace Game
 					removed = stack_.Remove(card);
 					break;
 				case CardPlace.Grave:
-                    removed = grave_.Remove(card);
-                    break;
+					removed = grave_.Remove(card);
+					break;
 				case CardPlace.Opened:
 					removed = opened_.Remove(card);
 					break;
@@ -140,6 +147,16 @@ namespace Game
 				list.Insert(list.Count + 1 + idx, card);
 			}
 		}
+
+		//===================================================
+		// 送受信（サーバー側のみで呼び出して良い関数）
+		//===================================================
+
+		public void Send(GameLog.ICommand command) => Conn.Send(command);
+		public void SendAndWait(GameLog.ICommand command) => Conn.SendAndWait(command);
+		public GameLog.IRequest WaitForRequest(WaitingType waitingType) => Conn.WaitForRequest(waitingType);
+		public T WaitForRequest<T>(WaitingType waitingType) where T : GameLog.IRequest => Conn.WaitForRequest<T>(waitingType);
+		public void WaitForAck() => Conn.WaitForAck();
 
 		//===================================================
 		// カードの操作
@@ -206,11 +223,11 @@ namespace Game
 		public void MoveToStackBottom(Card card) => MoveToStack(card, 0);
 
 		public void MoveToGrave(Card card, int idx = -1)
-        {
-            removeCard(card);
-            insert(grave_, card, idx);
-            card.place_ = CardPlace.Grave;
-        }
+		{
+			removeCard(card);
+			insert(grave_, card, idx);
+			card.place_ = CardPlace.Grave;
+		}
 
 		public void MoveToOpened(Card card, int idx = -1)
 		{
@@ -226,8 +243,8 @@ namespace Game
 		}
 
 		//===================================================
-        // バリデーション
-        //===================================================
+		// バリデーション
+		//===================================================
 
 		/// <summary>
 		/// 場の状態が正しいかを確認する
@@ -252,12 +269,12 @@ namespace Game
 			}
 
 			foreach (var card in grave_)
-            {
-                if (card.Place != CardPlace.Grave)
-                {
-                    throw new Exception(string.Format("Card {0} must in grave, but not found", card.Id));
-                }
-            }
+			{
+				if (card.Place != CardPlace.Grave)
+				{
+					throw new Exception(string.Format("Card {0} must in grave, but not found", card.Id));
+				}
+			}
 
 			foreach (var card in opened_)
 			{
@@ -289,6 +306,19 @@ namespace Game
 					Console.WriteLine();
 					throw new Exception(string.Format("Card {0} duplicated", c1.Id));
 				}
+			}
+		}
+
+		//===================================================
+		// バリデーション
+		//===================================================
+		public void Process()
+		{
+			while(true)
+			{
+				var req = WaitForRequest(WaitingType.None);
+				Logger.Info("" + req);
+				req.Process(this);
 			}
 		}
 	}

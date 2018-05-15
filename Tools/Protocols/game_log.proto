@@ -8,3 +8,24 @@ syntax = "proto3";
 package GameLog;
 import "master.proto";
 
+message Hoge {
+	int32 id = 1;
+}
+
+message ShutdownRequest {
+}
+
+message AckResponseRequest {
+}
+
+
+message PlayCardRequest {
+	int32 card_id = 1;
+}
+
+message DrawCardRequest {
+}
+
+message CardPlayed {
+}
+

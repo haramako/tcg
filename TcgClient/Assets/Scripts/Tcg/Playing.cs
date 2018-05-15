@@ -15,7 +15,7 @@ namespace Game
 		static public void Draw(Field f)
 		{
 			Logger.Assert(f.Stack.Count > 0);
-		    var card = f.StackTop();
+			var card = f.StackTop();
 			f.MoveToHands(card);
 		}
 	}

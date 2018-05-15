@@ -17,3 +17,4 @@ message FieldInfo {
 	int32 power = 2; /// 行動力
 	int32 turn = 3; /// ターン
 }
+

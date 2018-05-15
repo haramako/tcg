@@ -12,6 +12,387 @@ namespace GameLog {
   public static partial class GameLog {
 
   }
+  #region Messages
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class Hoge : pb.Message {
+    public Hoge() { }
+    public static Hoge CreateInstance() { var obj = new Hoge(); obj.Finish(); return obj; }
+    public static Hoge CreateEmpty() { return new Hoge(); }
+    private static readonly Hoge defaultInstance = new Hoge();
+    public static Hoge DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    public int Id;
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+      if (Id != 0) {
+        output.WriteInt32(1, Id);
+      }
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      if (Id != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(1, Id);
+      }
+      return size;
+    }
+    public static Hoge ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static Hoge ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static Hoge ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+          case 8: {
+            input.ReadInt32(ref this.Id);
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class ShutdownRequest : pb.Message {
+    public ShutdownRequest() { }
+    public static ShutdownRequest CreateInstance() { var obj = new ShutdownRequest(); obj.Finish(); return obj; }
+    public static ShutdownRequest CreateEmpty() { return new ShutdownRequest(); }
+    private static readonly ShutdownRequest defaultInstance = new ShutdownRequest();
+    public static ShutdownRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      return size;
+    }
+    public static ShutdownRequest ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static ShutdownRequest ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static ShutdownRequest ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class AckResponseRequest : pb.Message {
+    public AckResponseRequest() { }
+    public static AckResponseRequest CreateInstance() { var obj = new AckResponseRequest(); obj.Finish(); return obj; }
+    public static AckResponseRequest CreateEmpty() { return new AckResponseRequest(); }
+    private static readonly AckResponseRequest defaultInstance = new AckResponseRequest();
+    public static AckResponseRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      return size;
+    }
+    public static AckResponseRequest ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static AckResponseRequest ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static AckResponseRequest ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class PlayCardRequest : pb.Message {
+    public PlayCardRequest() { }
+    public static PlayCardRequest CreateInstance() { var obj = new PlayCardRequest(); obj.Finish(); return obj; }
+    public static PlayCardRequest CreateEmpty() { return new PlayCardRequest(); }
+    private static readonly PlayCardRequest defaultInstance = new PlayCardRequest();
+    public static PlayCardRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    public int CardId;
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+      if (CardId != 0) {
+        output.WriteInt32(1, CardId);
+      }
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      if (CardId != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(1, CardId);
+      }
+      return size;
+    }
+    public static PlayCardRequest ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static PlayCardRequest ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static PlayCardRequest ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+          case 8: {
+            input.ReadInt32(ref this.CardId);
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class DrawCardRequest : pb.Message {
+    public DrawCardRequest() { }
+    public static DrawCardRequest CreateInstance() { var obj = new DrawCardRequest(); obj.Finish(); return obj; }
+    public static DrawCardRequest CreateEmpty() { return new DrawCardRequest(); }
+    private static readonly DrawCardRequest defaultInstance = new DrawCardRequest();
+    public static DrawCardRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      return size;
+    }
+    public static DrawCardRequest ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static DrawCardRequest ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static DrawCardRequest ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class CardPlayed : pb.Message {
+    public CardPlayed() { }
+    public static CardPlayed CreateInstance() { var obj = new CardPlayed(); obj.Finish(); return obj; }
+    public static CardPlayed CreateEmpty() { return new CardPlayed(); }
+    private static readonly CardPlayed defaultInstance = new CardPlayed();
+    public static CardPlayed DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      return size;
+    }
+    public static CardPlayed ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static CardPlayed ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static CardPlayed ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    }
+  }
+
+  #endregion
+
 }
 
 #endregion Designer generated code
