@@ -5,7 +5,9 @@
 
 namespace :Game do
   cabinet :G do
-    table :CardTemplate
+    table :CardTemplate do
+      on_loaded
+    end
 
     table :I18nMessage, no_index: true, no_load: true do
       group :Id, :string

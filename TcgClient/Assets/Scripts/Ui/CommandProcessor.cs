@@ -7,8 +7,6 @@ using System;
 using System.Reflection;
 using UnityEngine;
 
-using GameScene = MainScene;
-
 public partial class CommandProcessor
 {
 	public static bool Log;

@@ -9,6 +9,7 @@ public class CardRenderer : MonoBehaviour
 	public Image CardImage;
 	public Text NameText;
 	public Text DescText;
+	public Text CostText;
 
 	public Card Card { get; private set; }
 
@@ -21,12 +22,14 @@ public class CardRenderer : MonoBehaviour
 		{
 			NameText.text = "";
 			DescText.text = "";
+			CostText.text = "";
 			CardImage.sprite = null;
 		}
 		else
 		{
 			NameText.text = card.T.Name;
-			DescText.text = card.T.Desc;
+			DescText.text = card.GetDesc();
+			CostText.text = "" + card.T.Cost;
 			var spriteName = string.Format("{0:D4}", card.T.ImageId);
 			ResourceCache.Load<Sprite>(spriteName).Done(spr =>
 			{

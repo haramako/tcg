@@ -39,6 +39,7 @@ namespace Game
 		{
 			CardTemplates_ = LoadPbFiles<CardTemplate>(CardTemplate.CreateInstance, "CardTemplate");
 			readOnlyCardTemplates_ = CardTemplates_.AsReadOnly();
+			foreach( var x in CardTemplates_ ) { x.OnLoaded(); }
 			{
 				CardTemplateById_ = new Dictionary<int, CardTemplate>();
 				int len = CardTemplates.Count;

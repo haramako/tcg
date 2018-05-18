@@ -27,6 +27,11 @@ namespace Master {
     Steam = 4,
   }
 
+  public enum SpecialType {
+    Attack = 0,
+    Defense = 1,
+  }
+
   #endregion
 
   #region Messages
@@ -624,6 +629,8 @@ namespace Master {
 
     public int Cost;
 
+    public List<global::Master.SpecialTemplate> SpecialTemplate = new List<global::Master.SpecialTemplate>();
+
     #region Lite runtime methods
     #endregion
 
@@ -643,6 +650,9 @@ namespace Master {
       }
       if (Cost != 0) {
         output.WriteInt32(5, Cost);
+      }
+      if (SpecialTemplate != null && SpecialTemplate.Count > 0) {
+        output.WriteMessageArray(6, SpecialTemplate);
       }
     }
 
@@ -668,6 +678,11 @@ namespace Master {
       }
       if (Cost != 0) {
         size += pb::CodedOutputStream.ComputeInt32Size(5, Cost);
+      }
+      if( SpecialTemplate != null ) {
+        foreach (global::Master.SpecialTemplate element in SpecialTemplate) {
+          size += pb::CodedOutputStream.ComputeMessageSize(6, element);
+        }
       }
       return size;
     }
@@ -711,6 +726,96 @@ namespace Master {
           }
           case 40: {
             input.ReadInt32(ref this.Cost);
+            break;
+          }
+          case 50: {
+            input.ReadMessageArray(tag, this.SpecialTemplate, global::Master.SpecialTemplate.CreateEmpty);
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    if( SpecialTemplate == null ){
+      SpecialTemplate = new List<global::Master.SpecialTemplate>();
+    }
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class SpecialTemplate : pb.Message {
+    public SpecialTemplate() { }
+    public static SpecialTemplate CreateInstance() { var obj = new SpecialTemplate(); obj.Finish(); return obj; }
+    public static SpecialTemplate CreateEmpty() { return new SpecialTemplate(); }
+    private static readonly SpecialTemplate defaultInstance = new SpecialTemplate();
+    public static SpecialTemplate DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    public global::Master.SpecialType Type = global::Master.SpecialType.Attack;
+
+    public int Amount;
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+      if (Type != global::Master.SpecialType.Attack) {
+        output.WriteEnum(1, (int) Type, Type);
+      }
+      if (Amount != 0) {
+        output.WriteInt32(2, Amount);
+      }
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      if (Type != global::Master.SpecialType.Attack) {
+        size += pb::CodedOutputStream.ComputeEnumSize(1, (int) Type);
+      }
+      if (Amount != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(2, Amount);
+      }
+      return size;
+    }
+    public static SpecialTemplate ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static SpecialTemplate ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static SpecialTemplate ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+          case 8: {
+            input.ReadEnum(ref this.Type);
+            break;
+          }
+          case 16: {
+            input.ReadInt32(ref this.Amount);
             break;
           }
         }

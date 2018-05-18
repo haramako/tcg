@@ -11,7 +11,7 @@ using RSG;
 using Game;
 using Master;
 
-public class MainScene : MonoBehaviour
+public class GameScene : MonoBehaviour
 {
 	public PoolBehaviour CardPool;
 	public GameObject FieldHolder;
@@ -23,6 +23,8 @@ public class MainScene : MonoBehaviour
 
 	public Text StackNumText;
 	public Text GraveNumText;
+	public Text CostText;
+	public Text LogText;
 
 	public Field Field;
 
@@ -43,6 +45,8 @@ public class MainScene : MonoBehaviour
 		Field.Conn.RequestTimeoutMillis = 1000;
 		Field.Conn.StartThread(Field.Process);
 
+		ShowMessage(Marker.T("ゲーム開始"));
+
 		for( int i = 0; i < 10; i++)
 		{
 			Field.MoveToHands(AddCardToField(randCard()));
@@ -54,6 +58,13 @@ public class MainScene : MonoBehaviour
 		}
 
 		redraw();
+	}
+
+	void OnDestroy()
+	{
+		if( Field != null ){
+			Field.Conn.Shutdown();
+		}
 	}
 
 	Card randCard()
@@ -75,12 +86,15 @@ public class MainScene : MonoBehaviour
 	public CardRenderer FindCardRenderer(Card card) => cardRenderers_[card.Id];
 	public CardRenderer FindCardRenderer(int cardId) => cardRenderers_[cardId];
 
+	public void Redraw() => redraw();
+
 	void redraw()
 	{
 		redrawCards();
 
 		StackNumText.text = "" + Field.Stack.Count;
 		GraveNumText.text = "" + Field.Grave.Count;
+		CostText.text = "" + Field.FieldInfo.Power;
 	}
 
 	void redrawCards()
@@ -138,8 +152,9 @@ public class MainScene : MonoBehaviour
 			{
 				cr.gameObject.SetActive(true);
 				card.Reversed = true;
-				cr.transform.localPosition = GraveHolder.transform.localPosition;
+				var pos = GraveHolder.transform.localPosition;
 				cr.gameObject.transform.SetAsLastSibling();
+				cr.transform.DOLocalMove(pos, 0.3f);
 				cr.Redraw(cr.Card);
 			}
 			else
@@ -157,6 +172,9 @@ public class MainScene : MonoBehaviour
 		switch( card.Place )
 		{
 			case CardPlace.Hands:
+				if( card.T.Cost > Field.FieldInfo.Power ){
+					return;
+				}
 				Send(new GameLog.PlayCardRequest { CardId = card.Id });
 				break;
 			case CardPlace.Stack:
@@ -165,17 +183,17 @@ public class MainScene : MonoBehaviour
 			default:
 				break;
 		}
-		redraw();
 		UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
 	}
 
-	public void OnButtonClick()
+	public void OnTurnEndClick()
 	{
-		CommonDialog.Open("HOGE?").Done(n => Debug.Log("Done " + n));
+		Send(new GameLog.TurnEndRequest { });
+		//CommonDialog.Open("HOGE?").Done(n => Debug.Log("Done " + n));
 	}
 
-	int CardWidth = 120;
-	int CardHeight = 180;
+	int CardWidth = 160;
+	int CardHeight = 230;
 
 	public Vector3 GetCardPosition(Graphic placeHolder, int num, int idx)
 	{
@@ -246,6 +264,19 @@ public class MainScene : MonoBehaviour
 		commands_.RemoveAt(0);
 
 		CommandProcessor.Process(this, command).DelayFrame(2).Done(updateProcesssCommand);
+	}
+
+	List<string> messages = new List<string>();
+	public void ShowMessage(TextMarker message)
+	{
+		var str = message.Text;
+		Debug.Log(str);
+		messages.Add(str);
+		if (messages.Count > 4)
+		{
+			messages.RemoveAt(0);
+		}
+		LogText.text = string.Join("\n", messages.ToArray());
 	}
 
 }

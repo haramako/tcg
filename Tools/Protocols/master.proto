@@ -73,6 +73,20 @@ message CardTemplate {
 	string desc = 3;
 	int32 image_id = 4;
 	int32 cost = 5; /// コスト
+	repeated SpecialTemplate special_template = 6; // 効果
+}
+
+enum SpecialType {
+	Attack = 0;
+	Defense = 1;
+}
+
+/**
+ *
+ */
+message SpecialTemplate {
+	SpecialType type = 1;
+	int32 amount = 2;
 }
 
 //===========================================

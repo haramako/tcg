@@ -31,6 +31,11 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     optional :desc, :string, 3
     optional :image_id, :int32, 4
     optional :cost, :int32, 5
+    repeated :special_template, :message, 6, "Master.SpecialTemplate"
+  end
+  add_message "Master.SpecialTemplate" do
+    optional :type, :enum, 1, "Master.SpecialType"
+    optional :amount, :int32, 2
   end
   add_message "Master.DebugMenuInfo" do
     optional :name, :string, 1
@@ -50,6 +55,10 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     value :Wsa, 3
     value :Steam, 4
   end
+  add_enum "Master.SpecialType" do
+    value :Attack, 0
+    value :Defense, 1
+  end
 end
 
 module Master
@@ -58,7 +67,9 @@ module Master
   MessageFusion = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.MessageFusion").msgclass
   ConfigInfo = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.ConfigInfo").msgclass
   CardTemplate = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.CardTemplate").msgclass
+  SpecialTemplate = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.SpecialTemplate").msgclass
   DebugMenuInfo = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.DebugMenuInfo").msgclass
   SettingType = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.SettingType").enummodule
   PlatformType = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.PlatformType").enummodule
+  SpecialType = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.SpecialType").enummodule
 end

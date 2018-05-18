@@ -89,6 +89,7 @@ namespace Game
 			FieldInfo = new FieldInfo
 			{
 				Hp = 20,
+                Power = 10,
 			};
 			Conn = new FieldConnection(this);
 			Conn.RequestTimeoutMillis = 1000;
@@ -157,6 +158,15 @@ namespace Game
 		public GameLog.IRequest WaitForRequest(WaitingType waitingType) => Conn.WaitForRequest(waitingType);
 		public T WaitForRequest<T>(WaitingType waitingType) where T : GameLog.IRequest => Conn.WaitForRequest<T>(waitingType);
 		public void WaitForAck() => Conn.WaitForAck();
+
+		//===================================================
+        // 便利関数
+        //===================================================
+
+		public void ShowMessage(TextMarker message)
+		{
+			Send(new GameLog.ShowMessage { Text = message.Text });
+		}
 
 		//===================================================
 		// カードの操作

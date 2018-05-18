@@ -12,15 +12,24 @@ message Hoge {
 	int32 id = 1;
 }
 
+message Redraw {
+}
+
 message ShutdownRequest {
 }
 
 message AckResponseRequest {
 }
 
+message TurnEndRequest {
+}
 
 message PlayCardRequest {
 	int32 card_id = 1;
+}
+
+message ShowMessage {
+	string text = 1;
 }
 
 message DrawCardRequest {
@@ -29,3 +38,6 @@ message DrawCardRequest {
 message CardPlayed {
 }
 
+message FocusCard {
+	int32 card_id = 1;
+}

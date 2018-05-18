@@ -85,6 +85,65 @@ namespace GameLog {
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class Redraw : pb.Message {
+    public Redraw() { }
+    public static Redraw CreateInstance() { var obj = new Redraw(); obj.Finish(); return obj; }
+    public static Redraw CreateEmpty() { return new Redraw(); }
+    private static readonly Redraw defaultInstance = new Redraw();
+    public static Redraw DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      return size;
+    }
+    public static Redraw ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static Redraw ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static Redraw ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class ShutdownRequest : pb.Message {
     public ShutdownRequest() { }
     public static ShutdownRequest CreateInstance() { var obj = new ShutdownRequest(); obj.Finish(); return obj; }
@@ -203,6 +262,65 @@ namespace GameLog {
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class TurnEndRequest : pb.Message {
+    public TurnEndRequest() { }
+    public static TurnEndRequest CreateInstance() { var obj = new TurnEndRequest(); obj.Finish(); return obj; }
+    public static TurnEndRequest CreateEmpty() { return new TurnEndRequest(); }
+    private static readonly TurnEndRequest defaultInstance = new TurnEndRequest();
+    public static TurnEndRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      return size;
+    }
+    public static TurnEndRequest ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static TurnEndRequest ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static TurnEndRequest ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class PlayCardRequest : pb.Message {
     public PlayCardRequest() { }
     public static PlayCardRequest CreateInstance() { var obj = new PlayCardRequest(); obj.Finish(); return obj; }
@@ -261,6 +379,77 @@ namespace GameLog {
           }
           case 8: {
             input.ReadInt32(ref this.CardId);
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class ShowMessage : pb.Message {
+    public ShowMessage() { }
+    public static ShowMessage CreateInstance() { var obj = new ShowMessage(); obj.Finish(); return obj; }
+    public static ShowMessage CreateEmpty() { return new ShowMessage(); }
+    private static readonly ShowMessage defaultInstance = new ShowMessage();
+    public static ShowMessage DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    public string Text = "";
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+      if (Text != "") {
+        output.WriteString(1, Text);
+      }
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      if (Text != "") {
+        size += pb::CodedOutputStream.ComputeStringSize(1, Text);
+      }
+      return size;
+    }
+    public static ShowMessage ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static ShowMessage ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static ShowMessage ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+          case 10: {
+            input.ReadString(ref this.Text);
             break;
           }
         }
@@ -379,6 +568,77 @@ namespace GameLog {
             if (pb::WireFormat.IsEndGroupTag(tag)) {
               return;
             }
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class FocusCard : pb.Message {
+    public FocusCard() { }
+    public static FocusCard CreateInstance() { var obj = new FocusCard(); obj.Finish(); return obj; }
+    public static FocusCard CreateEmpty() { return new FocusCard(); }
+    private static readonly FocusCard defaultInstance = new FocusCard();
+    public static FocusCard DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    public int CardId;
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+      if (CardId != 0) {
+        output.WriteInt32(1, CardId);
+      }
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      if (CardId != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(1, CardId);
+      }
+      return size;
+    }
+    public static FocusCard ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static FocusCard ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static FocusCard ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+          case 8: {
+            input.ReadInt32(ref this.CardId);
             break;
           }
         }

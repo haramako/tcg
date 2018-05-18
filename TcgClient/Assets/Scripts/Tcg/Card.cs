@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Master;
@@ -47,6 +47,19 @@ namespace Game
 		public bool IsTemp => place_ == CardPlace.Temp;
 
 		public bool Reversed;
+
+		public void ExecuteSpecial(Field f, SpecialParam param)
+		{
+			foreach( var special in T.Special){
+				special.Execute(f, param);
+			}
+		}
+
+		public string GetDesc()
+		{
+			var descs = T.Special.Select(s => s.GetDesc().Text);
+			return string.Join("/", descs.ToArray());
+		}
 	}
 
 }
