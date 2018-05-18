@@ -14,6 +14,7 @@ namespace :githook do
     end
     mkdir_p '.git/hooks'
     IO.write('.git/hooks/pre-commit', head + 'githook:precommit')
+    chmod 0777,'.git/hooks/pre-commit'
   end
 
   desc 'precommitフック'
