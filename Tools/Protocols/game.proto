@@ -14,7 +14,30 @@ message Card {
 
 message FieldInfo {
 	int32 hp = 1; /// HP
-	int32 power = 2; /// 行動力
+	int32 mana = 2; /// 行動力
 	int32 turn = 3; /// ターン
 }
 
+enum CharacterType {
+	Player = 0;
+	Enemy = 1;
+}
+
+/**
+ * 状態変化
+ */
+message StatusChange {
+	Master.CharacterStatus status = 1; /// 状態変化の種類
+	int32 count = 2; /// ターン数(255=無限)
+}
+
+message Character {
+	int32 id = 1;
+	int32 hp = 2;
+	CharacterType type = 3;
+	PlayerInfo player_info = 25; /// プレイヤーの場合のみ存在する、プレイヤーの情報
+	repeated StatusChange status_list = 22; /// 状態変化
+}
+
+message PlayerInfo {
+}

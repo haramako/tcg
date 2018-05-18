@@ -90,6 +90,47 @@ message SpecialTemplate {
 }
 
 //===========================================
+// キャラクタ
+//===========================================
+
+/**
+ * 状態変化.
+ */
+enum CharacterStatus {
+	NoneCharacterStatus = 0; /// なし
+	Block = 1; /// ブロック
+}
+
+/**
+ * 複数のステータス
+ */
+enum StatusGroup {
+	NoStatusGroup = 0; /// なにもない
+	AllStatus = 1; /// すべてのステータス
+	GoodStatus = 2; /// よいステータス
+	BadStatus = 3; /// 悪いステータス
+}
+
+/**
+ * 状態変化の情報
+ */
+message StatusInfo {
+	int32 id = 1;
+	string symbol = 2;
+	string name = 3;
+	repeated CharacterStatus overwrite = 4; /// 上書きする状態異常
+	repeated CharacterStatus against = 5; /// 相殺する状態異常	
+	bool decrement = 6; /// 自動減算
+	bool all = 13; /// clear_statusのALLできえる状態異常か（一部の状態異常は、ここにはいれない）
+	bool good = 7; /// 良い状態異常か
+	bool bad = 12; /// 悪い状態異常か
+	string spec = 11; /// 仕様書の説明文
+	string desc = 16; /// 説明文
+	bool without_player = 18; /// プレイヤーには無効
+	bool without_monster = 19; /// モンスターには無効
+}
+
+//===========================================
 // デバッグメニュー
 //===========================================
 

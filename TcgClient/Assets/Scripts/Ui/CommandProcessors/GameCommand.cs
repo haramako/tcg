@@ -19,15 +19,15 @@ public partial class CommandProcessor
 	}
 
 	public static IPromise ProcessRedraw(GameScene scene, Redraw com)
-    {
+	{
 		scene.Redraw();
-        return Promise.Resolved();
-    }
+		return Promise.Resolved();
+	}
 
 	public static IPromise ProcessFocusCard(GameScene scene, FocusCard com)
-    {
+	{
 		return processFocusCard(scene, com).AsPromise();
-    }
+	}
 
 	public static IEnumerator processFocusCard(GameScene scene, FocusCard com)
 	{

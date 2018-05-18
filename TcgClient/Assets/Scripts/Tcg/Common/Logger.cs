@@ -2,7 +2,8 @@
 using System.Linq;
 using System;
 #if UNITY_5_5_OR_NEWER
-using UnityEngine;
+using Debug = UnityEngine.Debug;
+using JsonUtility = UnityEngine.JsonUtility;
 #endif
 
 namespace Game

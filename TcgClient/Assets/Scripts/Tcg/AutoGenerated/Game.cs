@@ -12,6 +12,14 @@ namespace Game {
   public static partial class Game {
 
   }
+  #region Enums
+  public enum CharacterType {
+    Player = 0,
+    Enemy = 1,
+  }
+
+  #endregion
+
   #region Messages
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class Card : pb.Message {
@@ -108,7 +116,7 @@ namespace Game {
 
     public int Hp;
 
-    public int Power;
+    public int Mana;
 
     public int Turn;
 
@@ -120,8 +128,8 @@ namespace Game {
       if (Hp != 0) {
         output.WriteInt32(1, Hp);
       }
-      if (Power != 0) {
-        output.WriteInt32(2, Power);
+      if (Mana != 0) {
+        output.WriteInt32(2, Mana);
       }
       if (Turn != 0) {
         output.WriteInt32(3, Turn);
@@ -139,8 +147,8 @@ namespace Game {
       if (Hp != 0) {
         size += pb::CodedOutputStream.ComputeInt32Size(1, Hp);
       }
-      if (Power != 0) {
-        size += pb::CodedOutputStream.ComputeInt32Size(2, Power);
+      if (Mana != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(2, Mana);
       }
       if (Turn != 0) {
         size += pb::CodedOutputStream.ComputeInt32Size(3, Turn);
@@ -174,11 +182,282 @@ namespace Game {
             break;
           }
           case 16: {
-            input.ReadInt32(ref this.Power);
+            input.ReadInt32(ref this.Mana);
             break;
           }
           case 24: {
             input.ReadInt32(ref this.Turn);
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class StatusChange : pb.Message {
+    public StatusChange() { }
+    public static StatusChange CreateInstance() { var obj = new StatusChange(); obj.Finish(); return obj; }
+    public static StatusChange CreateEmpty() { return new StatusChange(); }
+    private static readonly StatusChange defaultInstance = new StatusChange();
+    public static StatusChange DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    public global::Master.CharacterStatus Status = global::Master.CharacterStatus.NoneCharacterStatus;
+
+    public int Count;
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+      if (Status != global::Master.CharacterStatus.NoneCharacterStatus) {
+        output.WriteEnum(1, (int) Status, Status);
+      }
+      if (Count != 0) {
+        output.WriteInt32(2, Count);
+      }
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      if (Status != global::Master.CharacterStatus.NoneCharacterStatus) {
+        size += pb::CodedOutputStream.ComputeEnumSize(1, (int) Status);
+      }
+      if (Count != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(2, Count);
+      }
+      return size;
+    }
+    public static StatusChange ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static StatusChange ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static StatusChange ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+          case 8: {
+            input.ReadEnum(ref this.Status);
+            break;
+          }
+          case 16: {
+            input.ReadInt32(ref this.Count);
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class Character : pb.Message {
+    public Character() { }
+    public static Character CreateInstance() { var obj = new Character(); obj.Finish(); return obj; }
+    public static Character CreateEmpty() { return new Character(); }
+    private static readonly Character defaultInstance = new Character();
+    public static Character DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    public int Id;
+
+    public int Hp;
+
+    public global::Game.CharacterType Type = global::Game.CharacterType.Player;
+
+    public global::Game.PlayerInfo PlayerInfo;
+
+    public List<global::Game.StatusChange> StatusList = new List<global::Game.StatusChange>();
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+      if (Id != 0) {
+        output.WriteInt32(1, Id);
+      }
+      if (Hp != 0) {
+        output.WriteInt32(2, Hp);
+      }
+      if (Type != global::Game.CharacterType.Player) {
+        output.WriteEnum(3, (int) Type, Type);
+      }
+      if (StatusList != null && StatusList.Count > 0) {
+        output.WriteMessageArray(22, StatusList);
+      }
+      if( PlayerInfo != null ){
+        output.WriteMessage(25, PlayerInfo);
+      }
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      if (Id != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(1, Id);
+      }
+      if (Hp != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(2, Hp);
+      }
+      if (Type != global::Game.CharacterType.Player) {
+        size += pb::CodedOutputStream.ComputeEnumSize(3, (int) Type);
+      }
+      if( PlayerInfo != null ){
+        size += pb::CodedOutputStream.ComputeMessageSize(25, PlayerInfo);
+      }
+      if( StatusList != null ) {
+        foreach (global::Game.StatusChange element in StatusList) {
+          size += pb::CodedOutputStream.ComputeMessageSize(22, element);
+        }
+      }
+      return size;
+    }
+    public static Character ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static Character ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static Character ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+          case 8: {
+            input.ReadInt32(ref this.Id);
+            break;
+          }
+          case 16: {
+            input.ReadInt32(ref this.Hp);
+            break;
+          }
+          case 24: {
+            input.ReadEnum(ref this.Type);
+            break;
+          }
+          case 178: {
+            input.ReadMessageArray(tag, this.StatusList, global::Game.StatusChange.CreateEmpty);
+            break;
+          }
+          case 202: {
+            global::Game.PlayerInfo builder = global::Game.PlayerInfo.CreateEmpty();
+            input.ReadMessage(builder);
+            PlayerInfo = builder;
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    if( PlayerInfo == null ){
+      PlayerInfo = global::Game.PlayerInfo.CreateInstance();
+    }
+    if( StatusList == null ){
+      StatusList = new List<global::Game.StatusChange>();
+    }
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class PlayerInfo : pb.Message {
+    public PlayerInfo() { }
+    public static PlayerInfo CreateInstance() { var obj = new PlayerInfo(); obj.Finish(); return obj; }
+    public static PlayerInfo CreateEmpty() { return new PlayerInfo(); }
+    private static readonly PlayerInfo defaultInstance = new PlayerInfo();
+    public static PlayerInfo DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      return size;
+    }
+    public static PlayerInfo ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static PlayerInfo ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static PlayerInfo ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
             break;
           }
         }

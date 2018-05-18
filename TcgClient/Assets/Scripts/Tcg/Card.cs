@@ -50,7 +50,8 @@ namespace Game
 
 		public void ExecuteSpecial(Field f, SpecialParam param)
 		{
-			foreach( var special in T.Special){
+			foreach( var special in T.Special)
+			{
 				special.Execute(f, param);
 			}
 		}

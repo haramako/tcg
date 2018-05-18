@@ -2,15 +2,15 @@
 using System.Linq;
 using Game;
 
-namespace Master 
+namespace Master
 {
 	public partial class CardTemplate
 	{
 		/// <summary>
-        /// 特殊能力
-		/// 
+		/// 特殊能力
+		///
 		/// SpecialTemplateからロード時に生成される
-        /// </summary>
+		/// </summary>
 		public Special[] Special { get; private set; }
 
 		public void OnLoaded()

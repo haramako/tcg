@@ -48,6 +48,9 @@ namespace Game
 		/// </summary>
 		public FieldConnection Conn;
 
+		public Character Player { get; private set; }
+		public Character Enemy { get; private set; }
+
 		/// <summary>
 		/// 手札(編集用のアクセスが必要な時のみ使用して、基本は使わない)
 		/// </summary>
@@ -88,9 +91,12 @@ namespace Game
 		{
 			FieldInfo = new FieldInfo
 			{
-				Hp = 20,
-                Power = 10,
+				Mana = Config.DefaultMana,
 			};
+
+			Player = new Character() {Hp = Config.DefaultMaxHp};
+			Enemy = new Character() {Hp = 120};
+
 			Conn = new FieldConnection(this);
 			Conn.RequestTimeoutMillis = 1000;
 		}
@@ -160,8 +166,8 @@ namespace Game
 		public void WaitForAck() => Conn.WaitForAck();
 
 		//===================================================
-        // 便利関数
-        //===================================================
+		// 便利関数
+		//===================================================
 
 		public void ShowMessage(TextMarker message)
 		{
@@ -326,9 +332,18 @@ namespace Game
 		{
 			while(true)
 			{
-				var req = WaitForRequest(WaitingType.None);
-				Logger.Info("" + req);
-				req.Process(this);
+				try
+				{
+					var req = WaitForRequest(WaitingType.None);
+					Logger.Info("" + req);
+					req.Process(this);
+				}
+				catch(Exception ex)
+				{
+					Logger.Info("Finish Proces() with error " + ex);
+					Conn.ShutdownError = ex;
+					return;
+				}
 			}
 		}
 	}

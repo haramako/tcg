@@ -32,6 +32,18 @@ namespace Master {
     Defense = 1,
   }
 
+  public enum CharacterStatus {
+    NoneCharacterStatus = 0,
+    Block = 1,
+  }
+
+  public enum StatusGroup {
+    NoStatusGroup = 0,
+    AllStatus = 1,
+    GoodStatus = 2,
+    BadStatus = 3,
+  }
+
   #endregion
 
   #region Messages
@@ -825,6 +837,243 @@ namespace Master {
     public override void Init() {
     }
     public override void Finish() {
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class StatusInfo : pb.Message {
+    public StatusInfo() { }
+    public static StatusInfo CreateInstance() { var obj = new StatusInfo(); obj.Finish(); return obj; }
+    public static StatusInfo CreateEmpty() { return new StatusInfo(); }
+    private static readonly StatusInfo defaultInstance = new StatusInfo();
+    public static StatusInfo DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    public int Id;
+
+    public string Symbol = "";
+
+    public string Name = "";
+
+    public List<global::Master.CharacterStatus> Overwrite = new List<global::Master.CharacterStatus>();
+
+    public List<global::Master.CharacterStatus> Against = new List<global::Master.CharacterStatus>();
+
+    public bool Decrement;
+
+    public bool All;
+
+    public bool Good;
+
+    public bool Bad;
+
+    public string Spec = "";
+
+    public string Desc = "";
+
+    public bool WithoutPlayer;
+
+    public bool WithoutMonster;
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+      if (Id != 0) {
+        output.WriteInt32(1, Id);
+      }
+      if (Symbol != "") {
+        output.WriteString(2, Symbol);
+      }
+      if (Name != "") {
+        output.WriteString(3, Name);
+      }
+      if (Overwrite.Count > 0) {
+      }
+      if (Against.Count > 0) {
+      }
+      if (Decrement != false) {
+        output.WriteBool(6, Decrement);
+      }
+      if (Good != false) {
+        output.WriteBool(7, Good);
+      }
+      if (Spec != "") {
+        output.WriteString(11, Spec);
+      }
+      if (Bad != false) {
+        output.WriteBool(12, Bad);
+      }
+      if (All != false) {
+        output.WriteBool(13, All);
+      }
+      if (Desc != "") {
+        output.WriteString(16, Desc);
+      }
+      if (WithoutPlayer != false) {
+        output.WriteBool(18, WithoutPlayer);
+      }
+      if (WithoutMonster != false) {
+        output.WriteBool(19, WithoutMonster);
+      }
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      if (Id != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(1, Id);
+      }
+      if (Symbol != "") {
+        size += pb::CodedOutputStream.ComputeStringSize(2, Symbol);
+      }
+      if (Name != "") {
+        size += pb::CodedOutputStream.ComputeStringSize(3, Name);
+      }
+      {
+        int dataSize = 0;
+        if (Overwrite.Count > 0) {
+          foreach (global::Master.CharacterStatus element in Overwrite) {
+            dataSize += pb::CodedOutputStream.ComputeEnumSizeNoTag((int) element);
+          }
+          size += dataSize;
+          size += 1;
+          size += pb::CodedOutputStream.ComputeRawVarint32Size((uint) dataSize);
+        }
+      }
+      {
+        int dataSize = 0;
+        if (Against.Count > 0) {
+          foreach (global::Master.CharacterStatus element in Against) {
+            dataSize += pb::CodedOutputStream.ComputeEnumSizeNoTag((int) element);
+          }
+          size += dataSize;
+          size += 1;
+          size += pb::CodedOutputStream.ComputeRawVarint32Size((uint) dataSize);
+        }
+      }
+      if (Decrement != false) {
+        size += pb::CodedOutputStream.ComputeBoolSize(6, Decrement);
+      }
+      if (All != false) {
+        size += pb::CodedOutputStream.ComputeBoolSize(13, All);
+      }
+      if (Good != false) {
+        size += pb::CodedOutputStream.ComputeBoolSize(7, Good);
+      }
+      if (Bad != false) {
+        size += pb::CodedOutputStream.ComputeBoolSize(12, Bad);
+      }
+      if (Spec != "") {
+        size += pb::CodedOutputStream.ComputeStringSize(11, Spec);
+      }
+      if (Desc != "") {
+        size += pb::CodedOutputStream.ComputeStringSize(16, Desc);
+      }
+      if (WithoutPlayer != false) {
+        size += pb::CodedOutputStream.ComputeBoolSize(18, WithoutPlayer);
+      }
+      if (WithoutMonster != false) {
+        size += pb::CodedOutputStream.ComputeBoolSize(19, WithoutMonster);
+      }
+      return size;
+    }
+    public static StatusInfo ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static StatusInfo ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static StatusInfo ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+          case 8: {
+            input.ReadInt32(ref this.Id);
+            break;
+          }
+          case 18: {
+            input.ReadString(ref this.Symbol);
+            break;
+          }
+          case 26: {
+            input.ReadString(ref this.Name);
+            break;
+          }
+          case 34:
+          case 32: {
+            input.ReadEnumArray<global::Master.CharacterStatus>(tag, this.Overwrite);
+            break;
+          }
+          case 42:
+          case 40: {
+            input.ReadEnumArray<global::Master.CharacterStatus>(tag, this.Against);
+            break;
+          }
+          case 48: {
+            input.ReadBool(ref this.Decrement);
+            break;
+          }
+          case 56: {
+            input.ReadBool(ref this.Good);
+            break;
+          }
+          case 90: {
+            input.ReadString(ref this.Spec);
+            break;
+          }
+          case 96: {
+            input.ReadBool(ref this.Bad);
+            break;
+          }
+          case 104: {
+            input.ReadBool(ref this.All);
+            break;
+          }
+          case 130: {
+            input.ReadString(ref this.Desc);
+            break;
+          }
+          case 144: {
+            input.ReadBool(ref this.WithoutPlayer);
+            break;
+          }
+          case 152: {
+            input.ReadBool(ref this.WithoutMonster);
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    if( Overwrite == null ){
+      Overwrite = new List<global::Master.CharacterStatus>();
+    }
+    if( Against == null ){
+      Against = new List<global::Master.CharacterStatus>();
+    }
     }
   }
 

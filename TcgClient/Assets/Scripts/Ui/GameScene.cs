@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Profiling;
 using System;
 using System.IO;
+using System.Linq;
 using DG.Tweening;
 using RSG;
 
@@ -26,6 +27,9 @@ public class GameScene : MonoBehaviour
 	public Text CostText;
 	public Text LogText;
 
+	public Text PlayerInfoText;
+	public Text EnemyInfoText;
+
 	public Field Field;
 
 	public Dictionary<int, CardRenderer> cardRenderers_ = new Dictionary<int, CardRenderer>();
@@ -41,18 +45,23 @@ public class GameScene : MonoBehaviour
 		G.Initialize(new LocalFileSystem(Path.Combine("..", "Output")));
 		G.LoadAll();
 
+		foreach( var c in G.ConfigInfos)
+		{
+			Config.SetValue(c.Id, c.Value);
+		}
+
 		Field = new Field();
 		Field.Conn.RequestTimeoutMillis = 1000;
 		Field.Conn.StartThread(Field.Process);
 
 		ShowMessage(Marker.T("ゲーム開始"));
 
-		for( int i = 0; i < 10; i++)
+		for( int i = 0; i < Config.DefaultDrawCount; i++)
 		{
 			Field.MoveToHands(AddCardToField(randCard()));
 		}
 
-		for (int i = 0; i < 20; i++ )
+		for (int i = 0; i < Config.DefaultDeckCount - Config.DefaultDrawCount; i++ )
 		{
 			Field.MoveToStack(AddCardToField(randCard()));
 		}
@@ -62,7 +71,8 @@ public class GameScene : MonoBehaviour
 
 	void OnDestroy()
 	{
-		if( Field != null ){
+		if( Field != null )
+		{
 			Field.Conn.Shutdown();
 		}
 	}
@@ -94,7 +104,10 @@ public class GameScene : MonoBehaviour
 
 		StackNumText.text = "" + Field.Stack.Count;
 		GraveNumText.text = "" + Field.Grave.Count;
-		CostText.text = "" + Field.FieldInfo.Power;
+		CostText.text = "" + Field.FieldInfo.Mana;
+
+		PlayerInfoText.text = GetCharacterStatus(Field.Player);
+		EnemyInfoText.text = GetCharacterStatus(Field.Enemy);
 	}
 
 	void redrawCards()
@@ -172,7 +185,8 @@ public class GameScene : MonoBehaviour
 		switch( card.Place )
 		{
 			case CardPlace.Hands:
-				if( card.T.Cost > Field.FieldInfo.Power ){
+				if( card.T.Cost > Field.FieldInfo.Mana )
+				{
 					return;
 				}
 				Send(new GameLog.PlayCardRequest { CardId = card.Id });
@@ -238,6 +252,7 @@ public class GameScene : MonoBehaviour
 		// エラーが起こっていた場合、
 		if (Field.Conn.State == ConnectionState.Shutdowned)
 		{
+			Debug.LogException(Field.Conn.ShutdownError);
 			return;
 		}
 
@@ -277,6 +292,24 @@ public class GameScene : MonoBehaviour
 			messages.RemoveAt(0);
 		}
 		LogText.text = string.Join("\n", messages.ToArray());
+	}
+
+
+	public string GetCharacterStatus(Character c)
+	{
+		var r = new System.Text.StringBuilder();
+
+		r.AppendFormat("HP: {0}\n", c.Hp);
+		foreach( var stat in c.StatusList)
+		{
+			if (stat.Count > 0)
+			{
+				var info = G.FindStatusInfoById((int)stat.Status);
+				r.AppendFormat("{0}({1})\n", info.Name, stat.Count);
+			}
+		}
+
+		return r.ToString();
 	}
 
 }

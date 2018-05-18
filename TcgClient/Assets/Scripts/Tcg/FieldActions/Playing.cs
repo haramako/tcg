@@ -9,12 +9,12 @@ namespace Game
 		static public void Play(Field f, Card card)
 		{
 			Logger.Assert(card.IsHands);
-			Logger.Assert(f.FieldInfo.Power >= card.T.Cost);
+			Logger.Assert(f.FieldInfo.Mana >= card.T.Cost);
 
-            f.SendAndWait(new GameLog.FocusCard { CardId = card.Id });
+			f.SendAndWait(new GameLog.FocusCard { CardId = card.Id });
 
-			f.FieldInfo.Power -= card.T.Cost;
-			var param = new SpecialParam { Card = card };
+			f.FieldInfo.Mana -= card.T.Cost;
+			var param = new SpecialParam { Card = card, Executer = f.Player, Target = f.Enemy };
 			card.ExecuteSpecial(f, param);
 
 			f.MoveToGrave(card);
@@ -23,7 +23,8 @@ namespace Game
 
 		static public void Draw(Field f)
 		{
-			if( !f.HasStack() ){
+			if( !f.HasStack() )
+			{
 				CardMoving.RecycleGrave(f);
 			}
 

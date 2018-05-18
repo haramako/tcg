@@ -43,11 +43,11 @@ namespace GameLog
 	}
 
 	public partial class TurnEndRequest : IRequest
-    {
-        public void Process(Field f)
-        {
+	{
+		public void Process(Field f)
+		{
 			TurnProcessing.EndTurn(f);
-        }
-    }
+		}
+	}
 
 }

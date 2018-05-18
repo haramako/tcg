@@ -12,9 +12,10 @@ namespace Game
 
 		public static Master.PlatformType Platform = Master.PlatformType.Switch; // 対象のプラットフォーム
 
-
-		public static bool DFZ1538 = true; // DFZ-1538 グリフォンを倍速にすると３倍速になるの修正が不安なのでフラグで対応(trueなら対応済）
-
+		public static int DefaultMaxHp = 20;
+		public static int DefaultMana = 4;
+		public static int DefaultDrawCount = 5;
+		public static int DefaultDeckCount = 20;
 
 		public static void Setup()
 		{

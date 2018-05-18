@@ -37,6 +37,21 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     optional :type, :enum, 1, "Master.SpecialType"
     optional :amount, :int32, 2
   end
+  add_message "Master.StatusInfo" do
+    optional :id, :int32, 1
+    optional :symbol, :string, 2
+    optional :name, :string, 3
+    repeated :overwrite, :enum, 4, "Master.CharacterStatus"
+    repeated :against, :enum, 5, "Master.CharacterStatus"
+    optional :decrement, :bool, 6
+    optional :all, :bool, 13
+    optional :good, :bool, 7
+    optional :bad, :bool, 12
+    optional :spec, :string, 11
+    optional :desc, :string, 16
+    optional :without_player, :bool, 18
+    optional :without_monster, :bool, 19
+  end
   add_message "Master.DebugMenuInfo" do
     optional :name, :string, 1
     optional :action, :string, 2
@@ -59,6 +74,16 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     value :Attack, 0
     value :Defense, 1
   end
+  add_enum "Master.CharacterStatus" do
+    value :NoneCharacterStatus, 0
+    value :Block, 1
+  end
+  add_enum "Master.StatusGroup" do
+    value :NoStatusGroup, 0
+    value :AllStatus, 1
+    value :GoodStatus, 2
+    value :BadStatus, 3
+  end
 end
 
 module Master
@@ -68,8 +93,11 @@ module Master
   ConfigInfo = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.ConfigInfo").msgclass
   CardTemplate = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.CardTemplate").msgclass
   SpecialTemplate = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.SpecialTemplate").msgclass
+  StatusInfo = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.StatusInfo").msgclass
   DebugMenuInfo = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.DebugMenuInfo").msgclass
   SettingType = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.SettingType").enummodule
   PlatformType = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.PlatformType").enummodule
   SpecialType = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.SpecialType").enummodule
+  CharacterStatus = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.CharacterStatus").enummodule
+  StatusGroup = Google::Protobuf::DescriptorPool.generated_pool.lookup("Master.StatusGroup").enummodule
 end

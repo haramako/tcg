@@ -8,59 +8,6 @@ namespace Game
 {
 	public partial class G
 	{
-		public static List< CardTemplate> CardTemplates_ = new List<CardTemplate> ();
-		static ReadOnlyCollection< CardTemplate> readOnlyCardTemplates_;
-
-		///<summary> CardTemplate のリスト </summary>
-		public static ReadOnlyCollection< CardTemplate> CardTemplates {get { return readOnlyCardTemplates_; } }
-		static Dictionary<int, CardTemplate> CardTemplateById_ = new Dictionary<int, CardTemplate> ();
-		/// <summary>CardTemplate を Id で検索する</summary>
-		[System.Diagnostics.DebuggerNonUserCode]
-		public static CardTemplate FindCardTemplateById(int key_, bool errorIfNotFound = true)
-		{
-			CardTemplate found;
-			if( CardTemplateById_.TryGetValue(key_, out found) )
-			{
-				return found;
-			}
-			else
-			{
-				if( errorIfNotFound )
-				{
-					throw new Exception("CardTemplate が見つかりません。 Id = " + key_);
-				}
-				else
-				{
-					return null;
-				}
-			}
-		}
-		static void loadCardTemplate()
-		{
-			CardTemplates_ = LoadPbFiles<CardTemplate>(CardTemplate.CreateInstance, "CardTemplate");
-			readOnlyCardTemplates_ = CardTemplates_.AsReadOnly();
-			foreach( var x in CardTemplates_ ) { x.OnLoaded(); }
-			{
-				CardTemplateById_ = new Dictionary<int, CardTemplate>();
-				int len = CardTemplates.Count;
-				for( int i = 0; i < len; i++)
-				{
-					var obj = CardTemplates[i];
-					if( obj.Id == default(int) ) { continue; }
-					if( CardTemplateById_.ContainsKey(obj.Id) )
-					{
-						Logger.Error("Idがかぶっています, Type=CardTemplate, ID=" + obj.Id);
-					}
-					CardTemplateById_.Add(obj.Id, obj);
-				}
-			}
-		}
-		static void unloadCardTemplate()
-		{
-			CardTemplates_ = null;
-			readOnlyCardTemplates_ = null;
-		}
-
 		public static List< I18nMessage> I18nMessages_ = new List<I18nMessage> ();
 		static ReadOnlyCollection< I18nMessage> readOnlyI18nMessages_;
 
@@ -142,14 +89,175 @@ namespace Game
 			readOnlyMessageFusions_ = null;
 		}
 
+		public static List< CardTemplate> CardTemplates_ = new List<CardTemplate> ();
+		static ReadOnlyCollection< CardTemplate> readOnlyCardTemplates_;
+
+		///<summary> CardTemplate のリスト </summary>
+		public static ReadOnlyCollection< CardTemplate> CardTemplates {get { return readOnlyCardTemplates_; } }
+		static Dictionary<int, CardTemplate> CardTemplateById_ = new Dictionary<int, CardTemplate> ();
+		/// <summary>CardTemplate を Id で検索する</summary>
+		[System.Diagnostics.DebuggerNonUserCode]
+		public static CardTemplate FindCardTemplateById(int key_, bool errorIfNotFound = true)
+		{
+			CardTemplate found;
+			if( CardTemplateById_.TryGetValue(key_, out found) )
+			{
+				return found;
+			}
+			else
+			{
+				if( errorIfNotFound )
+				{
+					throw new Exception("CardTemplate が見つかりません。 Id = " + key_);
+				}
+				else
+				{
+					return null;
+				}
+			}
+		}
+		static void loadCardTemplate()
+		{
+			CardTemplates_ = LoadPbFiles<CardTemplate>(CardTemplate.CreateInstance, "CardTemplate");
+			readOnlyCardTemplates_ = CardTemplates_.AsReadOnly();
+			foreach( var x in CardTemplates_ ) { x.OnLoaded(); }
+			{
+				CardTemplateById_ = new Dictionary<int, CardTemplate>();
+				int len = CardTemplates.Count;
+				for( int i = 0; i < len; i++)
+				{
+					var obj = CardTemplates[i];
+					if( obj.Id == default(int) ) { continue; }
+					if( CardTemplateById_.ContainsKey(obj.Id) )
+					{
+						Logger.Error("Idがかぶっています, Type=CardTemplate, ID=" + obj.Id);
+					}
+					CardTemplateById_.Add(obj.Id, obj);
+				}
+			}
+		}
+		static void unloadCardTemplate()
+		{
+			CardTemplates_ = null;
+			readOnlyCardTemplates_ = null;
+		}
+
+		public static List< StatusInfo> StatusInfos_ = new List<StatusInfo> ();
+		static ReadOnlyCollection< StatusInfo> readOnlyStatusInfos_;
+
+		///<summary> StatusInfo のリスト </summary>
+		public static ReadOnlyCollection< StatusInfo> StatusInfos {get { return readOnlyStatusInfos_; } }
+		static Dictionary<int, StatusInfo> StatusInfoById_ = new Dictionary<int, StatusInfo> ();
+		/// <summary>StatusInfo を Id で検索する</summary>
+		[System.Diagnostics.DebuggerNonUserCode]
+		public static StatusInfo FindStatusInfoById(int key_, bool errorIfNotFound = true)
+		{
+			StatusInfo found;
+			if( StatusInfoById_.TryGetValue(key_, out found) )
+			{
+				return found;
+			}
+			else
+			{
+				if( errorIfNotFound )
+				{
+					throw new Exception("StatusInfo が見つかりません。 Id = " + key_);
+				}
+				else
+				{
+					return null;
+				}
+			}
+		}
+		static void loadStatusInfo()
+		{
+			StatusInfos_ = LoadPbFiles<StatusInfo>(StatusInfo.CreateInstance, "StatusInfo");
+			readOnlyStatusInfos_ = StatusInfos_.AsReadOnly();
+			{
+				StatusInfoById_ = new Dictionary<int, StatusInfo>();
+				int len = StatusInfos.Count;
+				for( int i = 0; i < len; i++)
+				{
+					var obj = StatusInfos[i];
+					if( obj.Id == default(int) ) { continue; }
+					if( StatusInfoById_.ContainsKey(obj.Id) )
+					{
+						Logger.Error("Idがかぶっています, Type=StatusInfo, ID=" + obj.Id);
+					}
+					StatusInfoById_.Add(obj.Id, obj);
+				}
+			}
+		}
+		static void unloadStatusInfo()
+		{
+			StatusInfos_ = null;
+			readOnlyStatusInfos_ = null;
+		}
+
+		public static List< ConfigInfo> ConfigInfos_ = new List<ConfigInfo> ();
+		static ReadOnlyCollection< ConfigInfo> readOnlyConfigInfos_;
+
+		///<summary> ConfigInfo のリスト </summary>
+		public static ReadOnlyCollection< ConfigInfo> ConfigInfos {get { return readOnlyConfigInfos_; } }
+		static Dictionary<string, ConfigInfo> ConfigInfoById_ = new Dictionary<string, ConfigInfo> ();
+		/// <summary>ConfigInfo を Id で検索する</summary>
+		[System.Diagnostics.DebuggerNonUserCode]
+		public static ConfigInfo FindConfigInfoById(string key_, bool errorIfNotFound = true)
+		{
+			ConfigInfo found;
+			if( ConfigInfoById_.TryGetValue(key_, out found) )
+			{
+				return found;
+			}
+			else
+			{
+				if( errorIfNotFound )
+				{
+					throw new Exception("ConfigInfo が見つかりません。 Id = " + key_);
+				}
+				else
+				{
+					return null;
+				}
+			}
+		}
+		static void loadConfigInfo()
+		{
+			ConfigInfos_ = LoadPbFiles<ConfigInfo>(ConfigInfo.CreateInstance, "ConfigInfo");
+			readOnlyConfigInfos_ = ConfigInfos_.AsReadOnly();
+			{
+				ConfigInfoById_ = new Dictionary<string, ConfigInfo>();
+				int len = ConfigInfos.Count;
+				for( int i = 0; i < len; i++)
+				{
+					var obj = ConfigInfos[i];
+					if( obj.Id == default(string) ) { continue; }
+					if( ConfigInfoById_.ContainsKey(obj.Id) )
+					{
+						Logger.Error("Idがかぶっています, Type=ConfigInfo, ID=" + obj.Id);
+					}
+					ConfigInfoById_.Add(obj.Id, obj);
+				}
+			}
+		}
+		static void unloadConfigInfo()
+		{
+			ConfigInfos_ = null;
+			readOnlyConfigInfos_ = null;
+		}
+
 		public static void LoadAll()
 		{
 			loadCardTemplate();
+			loadStatusInfo();
+			loadConfigInfo();
 			loadOther();
 		}
 		public static void UnloadAll()
 		{
 			unloadCardTemplate();
+			unloadStatusInfo();
+			unloadConfigInfo();
 			unloadOther();
 		}
 	}

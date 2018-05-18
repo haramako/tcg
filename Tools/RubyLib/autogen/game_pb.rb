@@ -11,12 +11,33 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   end
   add_message "Game.FieldInfo" do
     optional :hp, :int32, 1
-    optional :power, :int32, 2
+    optional :mana, :int32, 2
     optional :turn, :int32, 3
+  end
+  add_message "Game.StatusChange" do
+    optional :status, :enum, 1, "Master.CharacterStatus"
+    optional :count, :int32, 2
+  end
+  add_message "Game.Character" do
+    optional :id, :int32, 1
+    optional :hp, :int32, 2
+    optional :type, :enum, 3, "Game.CharacterType"
+    optional :player_info, :message, 25, "Game.PlayerInfo"
+    repeated :status_list, :message, 22, "Game.StatusChange"
+  end
+  add_message "Game.PlayerInfo" do
+  end
+  add_enum "Game.CharacterType" do
+    value :Player, 0
+    value :Enemy, 1
   end
 end
 
 module Game
   Card = Google::Protobuf::DescriptorPool.generated_pool.lookup("Game.Card").msgclass
   FieldInfo = Google::Protobuf::DescriptorPool.generated_pool.lookup("Game.FieldInfo").msgclass
+  StatusChange = Google::Protobuf::DescriptorPool.generated_pool.lookup("Game.StatusChange").msgclass
+  Character = Google::Protobuf::DescriptorPool.generated_pool.lookup("Game.Character").msgclass
+  PlayerInfo = Google::Protobuf::DescriptorPool.generated_pool.lookup("Game.PlayerInfo").msgclass
+  CharacterType = Google::Protobuf::DescriptorPool.generated_pool.lookup("Game.CharacterType").enummodule
 end

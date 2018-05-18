@@ -6,6 +6,8 @@ using Game;
 
 public class CardRenderer : MonoBehaviour
 {
+	public GameObject Reverse;
+	public GameObject Base;
 	public Image CardImage;
 	public Text NameText;
 	public Text DescText;
@@ -20,13 +22,14 @@ public class CardRenderer : MonoBehaviour
 
 		if (card.Reversed)
 		{
-			NameText.text = "";
-			DescText.text = "";
-			CostText.text = "";
-			CardImage.sprite = null;
+			Reverse.SetActive(true);
+			Base.SetActive(false);
 		}
 		else
 		{
+			Reverse.SetActive(false);
+			Base.SetActive(true);
+
 			NameText.text = card.T.Name;
 			DescText.text = card.GetDesc();
 			CostText.text = "" + card.T.Cost;
