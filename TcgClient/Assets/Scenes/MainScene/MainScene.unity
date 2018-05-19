@@ -1960,7 +1960,7 @@ GameObject:
   - component: {fileID: 1163977753}
   - component: {fileID: 1163977757}
   m_Layer: 5
-  m_Name: MainScene
+  m_Name: GameScene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
