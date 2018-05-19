@@ -73,6 +73,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   add_enum "Master.SpecialType" do
     value :Attack, 0
     value :Defense, 1
+    value :Draw, 2
   end
   add_enum "Master.CharacterStatus" do
     value :NoneCharacterStatus, 0

@@ -90,14 +90,27 @@ namespace Game
 			}
 		}
 
-		public void StartThread(Action process)
+		public void StartThread(Action proc)
 		{
 			Logger.Assert(State == ConnectionState.Initializing);
 
-			thread_ = new Thread(() => process());
+			thread_ = new Thread(() => process(proc));
 			thread_.Start();
 
 			sendQueue_.Dequeue(RequestTimeoutMillis); // スレッドが開始するまでまつ
+		}
+
+		void process(Action proc)
+		{
+			try
+			{
+				proc();
+			}
+			catch (Exception ex)
+			{
+				Logger.Info("Finish Proces() with error " + ex);
+				ShutdownError = ex;
+			}
 		}
 
 		public void Shutdown()

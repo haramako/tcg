@@ -35,4 +35,21 @@ namespace Game.Specials
 			return Marker.T("ブロック({0})").Format(T.Amount);
 		}
 	}
+
+	public class Draw : Special
+	{
+		public override void Execute(Field f, SpecialParam p)
+		{
+			for( int i = 0; i < T.Amount; i++)
+			{
+				Playing.Draw(f);
+			}
+			Playing.Redraw(f);
+		}
+
+		public override TextMarker GetDesc()
+		{
+			return Marker.T("{0}枚カードを引く").Format(T.Amount);
+		}
+	}
 }

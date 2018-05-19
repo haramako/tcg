@@ -30,6 +30,7 @@ namespace Master {
   public enum SpecialType {
     Attack = 0,
     Defense = 1,
+    Draw = 2,
   }
 
   public enum CharacterStatus {

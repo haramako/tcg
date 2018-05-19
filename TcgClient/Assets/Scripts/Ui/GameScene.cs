@@ -47,12 +47,12 @@ public class GameScene : MonoBehaviour
 
 		foreach( var c in G.ConfigInfos)
 		{
-			Config.SetValue(c.Id, c.Value);
+			ConfigLoader.SetValue("Game." + c.Id, c.Value);
 		}
 
 		Field = new Field();
 		Field.Conn.RequestTimeoutMillis = 1000;
-		Field.Conn.StartThread(Field.Process);
+		Field.StartThread();
 
 		ShowMessage(Marker.T("ゲーム開始"));
 
@@ -261,6 +261,7 @@ public class GameScene : MonoBehaviour
 
 	void updateProcesssCommand()
 	{
+		GetComponent<GraphicRaycaster>().enabled = false;
 		if (commands_.Count <= 0)
 		{
 			switch (Field.Conn.WaitingType)
@@ -270,8 +271,9 @@ public class GameScene : MonoBehaviour
 					break;
 				case WaitingType.Ack:
 					Send(new GameLog.AckResponseRequest());
-					break;
+					return;
 			}
+			GetComponent<GraphicRaycaster>().enabled = true;
 			return;
 		}
 

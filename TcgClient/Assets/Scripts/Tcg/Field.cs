@@ -87,6 +87,10 @@ namespace Game
 		/// </summary>
 		int nextCardId_ = 1;
 
+		//===================================================
+		// 初期化
+		//===================================================
+
 		public Field()
 		{
 			FieldInfo = new FieldInfo
@@ -99,6 +103,22 @@ namespace Game
 
 			Conn = new FieldConnection(this);
 			Conn.RequestTimeoutMillis = 1000;
+		}
+
+		public void StartThread()
+		{
+			Conn.StartThread(mainloop);
+
+		}
+
+		void mainloop()
+		{
+			while (true)
+			{
+				var req = WaitForRequest(WaitingType.None);
+				Logger.Info("" + req);
+				req.Process(this);
+			}
 		}
 
 		//===================================================
@@ -325,26 +345,5 @@ namespace Game
 			}
 		}
 
-		//===================================================
-		// バリデーション
-		//===================================================
-		public void Process()
-		{
-			while(true)
-			{
-				try
-				{
-					var req = WaitForRequest(WaitingType.None);
-					Logger.Info("" + req);
-					req.Process(this);
-				}
-				catch(Exception ex)
-				{
-					Logger.Info("Finish Proces() with error " + ex);
-					Conn.ShutdownError = ex;
-					return;
-				}
-			}
-		}
 	}
 }

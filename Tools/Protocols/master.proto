@@ -77,8 +77,18 @@ message CardTemplate {
 }
 
 enum SpecialType {
+	/**
+	 * 攻撃を行う
+	 */
 	Attack = 0;
+	/**
+	 * ブロックを加算する
+	 */
 	Defense = 1;
+	/**
+	 * カードを引く
+	 */
+	Draw = 2;
 }
 
 /**
