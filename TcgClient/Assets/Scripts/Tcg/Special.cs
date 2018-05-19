@@ -61,5 +61,39 @@ namespace Game
 			}
 		}
 
+		public int GetAmount(Field f, SpecialParam p)
+		{
+			if (T.Amount != 0)
+			{
+				return T.Amount;
+			}
+
+			var c = T.Counter;
+			switch (c.Type)
+			{
+				case SpecialTemplate.Types.CounterType.InHand:
+					return f.Hands.Count * c.Multiply;
+				default:
+					throw new Exception("Unknown counter type " + c.Type);
+			}
+		}
+
+		public TextMarker GetAmountDesc()
+		{
+			if( T.Amount != 0)
+			{
+				return Marker.T("{0}").Format(T.Amount);
+			}
+
+			var c = T.Counter;
+			switch (c.Type)
+			{
+				case SpecialTemplate.Types.CounterType.InHand:
+					return Marker.T("{0}の枚数x{1}").Format("手札", c.Multiply);
+				default:
+					throw new Exception("Unknown counter type " + c.Type);
+			}
+		}
+
 	}
 }

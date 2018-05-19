@@ -77,6 +77,7 @@ class PbConverter
       end
     elsif desc.label == :repeated
       f = m.__send__(k)
+      v = [v] unless v.is_a? Array # 対象が配列なら 1 は [1] に変換する
       v.each { |v2| f << conv_type(desc, v2) }
     else
       begin

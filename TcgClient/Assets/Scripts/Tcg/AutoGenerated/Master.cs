@@ -27,10 +27,27 @@ namespace Master {
     Steam = 4,
   }
 
+  public enum CardLocation {
+    NoneCardLocation = 0,
+    Hand = 1,
+    Stack = 2,
+    Grave = 3,
+  }
+
   public enum SpecialType {
     Attack = 0,
     Defense = 1,
     Draw = 2,
+    Weak = 3,
+    PowerUp = 5,
+    PowerDown = 6,
+    AddCard = 7,
+    Discard = 8,
+    CloneCard = 9,
+    AddMana = 10,
+    AddHp = 11,
+    MoveSelectedCard = 12,
+    IfCardAll = 100,
   }
 
   public enum CharacterStatus {
@@ -632,6 +649,17 @@ namespace Master {
       get { return defaultInstance; }
     }
 
+    #region Nested types
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    public static partial class Types {
+      public enum CardType {
+        Attack = 0,
+        Skill = 1,
+      }
+
+    }
+    #endregion
+
     public int Id;
 
     public string Name = "";
@@ -643,6 +671,8 @@ namespace Master {
     public int Cost;
 
     public List<global::Master.SpecialTemplate> SpecialTemplate = new List<global::Master.SpecialTemplate>();
+
+    public List<global::Master.CardTemplate.Types.CardType> Type = new List<global::Master.CardTemplate.Types.CardType>();
 
     #region Lite runtime methods
     #endregion
@@ -666,6 +696,8 @@ namespace Master {
       }
       if (SpecialTemplate != null && SpecialTemplate.Count > 0) {
         output.WriteMessageArray(6, SpecialTemplate);
+      }
+      if (Type.Count > 0) {
       }
     }
 
@@ -695,6 +727,17 @@ namespace Master {
       if( SpecialTemplate != null ) {
         foreach (global::Master.SpecialTemplate element in SpecialTemplate) {
           size += pb::CodedOutputStream.ComputeMessageSize(6, element);
+        }
+      }
+      {
+        int dataSize = 0;
+        if (Type.Count > 0) {
+          foreach (global::Master.CardTemplate.Types.CardType element in Type) {
+            dataSize += pb::CodedOutputStream.ComputeEnumSizeNoTag((int) element);
+          }
+          size += dataSize;
+          size += 1;
+          size += pb::CodedOutputStream.ComputeRawVarint32Size((uint) dataSize);
         }
       }
       return size;
@@ -745,6 +788,11 @@ namespace Master {
             input.ReadMessageArray(tag, this.SpecialTemplate, global::Master.SpecialTemplate.CreateEmpty);
             break;
           }
+          case 58:
+          case 56: {
+            input.ReadEnumArray<global::Master.CardTemplate.Types.CardType>(tag, this.Type);
+            break;
+          }
         }
       }
     }
@@ -754,6 +802,9 @@ namespace Master {
     public override void Finish() {
     if( SpecialTemplate == null ){
       SpecialTemplate = new List<global::Master.SpecialTemplate>();
+    }
+    if( Type == null ){
+      Type = new List<global::Master.CardTemplate.Types.CardType>();
     }
     }
   }
@@ -768,9 +819,155 @@ namespace Master {
       get { return defaultInstance; }
     }
 
+    #region Nested types
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    public static partial class Types {
+      public enum Option {
+        Random = 0,
+      }
+
+      public enum CounterType {
+        UsedInTurn = 0,
+        InHand = 1,
+        Mana = 2,
+      }
+
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+      public sealed partial class Counter : pb.Message {
+        public Counter() { }
+        public static Counter CreateInstance() { var obj = new Counter(); obj.Finish(); return obj; }
+        public static Counter CreateEmpty() { return new Counter(); }
+        private static readonly Counter defaultInstance = new Counter();
+        public static Counter DefaultInstance {
+          get { return defaultInstance; }
+        }
+
+        public global::Master.SpecialTemplate.Types.CounterType Type = global::Master.SpecialTemplate.Types.CounterType.UsedInTurn;
+
+        public int Multiply;
+
+        public List<global::Master.CardTemplate.Types.CardType> CardType = new List<global::Master.CardTemplate.Types.CardType>();
+
+        public int CardId;
+
+        #region Lite runtime methods
+        #endregion
+
+        public override void WriteTo(pb::CodedOutputStream output) {
+          CalcSerializedSize();
+          if (Type != global::Master.SpecialTemplate.Types.CounterType.UsedInTurn) {
+            output.WriteEnum(1, (int) Type, Type);
+          }
+          if (Multiply != 0) {
+            output.WriteInt32(2, Multiply);
+          }
+          if (CardType.Count > 0) {
+          }
+          if (CardId != 0) {
+            output.WriteInt32(4, CardId);
+          }
+        }
+
+        public override int SerializedSize {
+          get {
+            return CalcSerializedSize();
+          }
+        }
+
+        private int CalcSerializedSize() {
+          int size = 0;
+          if (Type != global::Master.SpecialTemplate.Types.CounterType.UsedInTurn) {
+            size += pb::CodedOutputStream.ComputeEnumSize(1, (int) Type);
+          }
+          if (Multiply != 0) {
+            size += pb::CodedOutputStream.ComputeInt32Size(2, Multiply);
+          }
+          {
+            int dataSize = 0;
+            if (CardType.Count > 0) {
+              foreach (global::Master.CardTemplate.Types.CardType element in CardType) {
+                dataSize += pb::CodedOutputStream.ComputeEnumSizeNoTag((int) element);
+              }
+              size += dataSize;
+              size += 1;
+              size += pb::CodedOutputStream.ComputeRawVarint32Size((uint) dataSize);
+            }
+          }
+          if (CardId != 0) {
+            size += pb::CodedOutputStream.ComputeInt32Size(4, CardId);
+          }
+          return size;
+        }
+        public static Counter ParseFrom(byte[] data) {
+          var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+        }
+        public static Counter ParseFrom(global::System.IO.Stream input) {
+          var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+        }
+        public static Counter ParseFrom(pb::CodedInputStream input) {
+          var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+        }
+        public override void MergeFrom(pb::CodedInputStream input) {
+          uint tag;
+          while (input.ReadTag(out tag)) {
+            switch (tag) {
+              case 0: {
+                throw pb::InvalidProtocolBufferException.InvalidTag();
+              }
+              default: {
+                if (pb::WireFormat.IsEndGroupTag(tag)) {
+                  return;
+                }
+                break;
+              }
+              case 8: {
+                input.ReadEnum(ref this.Type);
+                break;
+              }
+              case 16: {
+                input.ReadInt32(ref this.Multiply);
+                break;
+              }
+              case 26:
+              case 24: {
+                input.ReadEnumArray<global::Master.CardTemplate.Types.CardType>(tag, this.CardType);
+                break;
+              }
+              case 32: {
+                input.ReadInt32(ref this.CardId);
+                break;
+              }
+            }
+          }
+        }
+
+        public override void Init() {
+        }
+        public override void Finish() {
+        if( CardType == null ){
+          CardType = new List<global::Master.CardTemplate.Types.CardType>();
+        }
+        }
+      }
+
+    }
+    #endregion
+
     public global::Master.SpecialType Type = global::Master.SpecialType.Attack;
 
     public int Amount;
+
+    public List<global::Master.SpecialTemplate.Types.Option> Opt = new List<global::Master.SpecialTemplate.Types.Option>();
+
+    public List<global::Master.CardTemplate.Types.CardType> CardType = new List<global::Master.CardTemplate.Types.CardType>();
+
+    public int CardId;
+
+    public global::Master.CardLocation Location = global::Master.CardLocation.NoneCardLocation;
+
+    public global::Master.CardLocation LocationTo = global::Master.CardLocation.NoneCardLocation;
+
+    public global::Master.SpecialTemplate.Types.Counter Counter;
 
     #region Lite runtime methods
     #endregion
@@ -782,6 +979,22 @@ namespace Master {
       }
       if (Amount != 0) {
         output.WriteInt32(2, Amount);
+      }
+      if (Opt.Count > 0) {
+      }
+      if (CardId != 0) {
+        output.WriteInt32(4, CardId);
+      }
+      if (Location != global::Master.CardLocation.NoneCardLocation) {
+        output.WriteEnum(5, (int) Location, Location);
+      }
+      if( Counter != null ){
+        output.WriteMessage(6, Counter);
+      }
+      if (LocationTo != global::Master.CardLocation.NoneCardLocation) {
+        output.WriteEnum(7, (int) LocationTo, LocationTo);
+      }
+      if (CardType.Count > 0) {
       }
     }
 
@@ -798,6 +1011,40 @@ namespace Master {
       }
       if (Amount != 0) {
         size += pb::CodedOutputStream.ComputeInt32Size(2, Amount);
+      }
+      {
+        int dataSize = 0;
+        if (Opt.Count > 0) {
+          foreach (global::Master.SpecialTemplate.Types.Option element in Opt) {
+            dataSize += pb::CodedOutputStream.ComputeEnumSizeNoTag((int) element);
+          }
+          size += dataSize;
+          size += 1;
+          size += pb::CodedOutputStream.ComputeRawVarint32Size((uint) dataSize);
+        }
+      }
+      {
+        int dataSize = 0;
+        if (CardType.Count > 0) {
+          foreach (global::Master.CardTemplate.Types.CardType element in CardType) {
+            dataSize += pb::CodedOutputStream.ComputeEnumSizeNoTag((int) element);
+          }
+          size += dataSize;
+          size += 1;
+          size += pb::CodedOutputStream.ComputeRawVarint32Size((uint) dataSize);
+        }
+      }
+      if (CardId != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(4, CardId);
+      }
+      if (Location != global::Master.CardLocation.NoneCardLocation) {
+        size += pb::CodedOutputStream.ComputeEnumSize(5, (int) Location);
+      }
+      if (LocationTo != global::Master.CardLocation.NoneCardLocation) {
+        size += pb::CodedOutputStream.ComputeEnumSize(7, (int) LocationTo);
+      }
+      if( Counter != null ){
+        size += pb::CodedOutputStream.ComputeMessageSize(6, Counter);
       }
       return size;
     }
@@ -831,6 +1078,34 @@ namespace Master {
             input.ReadInt32(ref this.Amount);
             break;
           }
+          case 26:
+          case 24: {
+            input.ReadEnumArray<global::Master.SpecialTemplate.Types.Option>(tag, this.Opt);
+            break;
+          }
+          case 32: {
+            input.ReadInt32(ref this.CardId);
+            break;
+          }
+          case 40: {
+            input.ReadEnum(ref this.Location);
+            break;
+          }
+          case 50: {
+            global::Master.SpecialTemplate.Types.Counter builder = global::Master.SpecialTemplate.Types.Counter.CreateEmpty();
+            input.ReadMessage(builder);
+            Counter = builder;
+            break;
+          }
+          case 56: {
+            input.ReadEnum(ref this.LocationTo);
+            break;
+          }
+          case 66:
+          case 64: {
+            input.ReadEnumArray<global::Master.CardTemplate.Types.CardType>(tag, this.CardType);
+            break;
+          }
         }
       }
     }
@@ -838,6 +1113,15 @@ namespace Master {
     public override void Init() {
     }
     public override void Finish() {
+    if( Opt == null ){
+      Opt = new List<global::Master.SpecialTemplate.Types.Option>();
+    }
+    if( CardType == null ){
+      CardType = new List<global::Master.CardTemplate.Types.CardType>();
+    }
+    if( Counter == null ){
+      Counter = global::Master.SpecialTemplate.Types.Counter.CreateInstance();
+    }
     }
   }
 

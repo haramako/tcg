@@ -12,7 +12,7 @@ using RSG;
 using Game;
 using Master;
 
-public class GameScene : MonoBehaviour
+public class GameScene : MonoSingleton<GameScene>
 {
 	public PoolBehaviour CardPool;
 	public GameObject FieldHolder;
@@ -34,11 +34,20 @@ public class GameScene : MonoBehaviour
 
 	public Dictionary<int, CardRenderer> cardRenderers_ = new Dictionary<int, CardRenderer>();
 
-	private void Awake()
+	protected override void Awake()
 	{
+		base.Awake();
+
+		Promise.UnhandledException += promiseExceptionHandler;
+
 		Configure.Init();
 		ResourceCache.Init();
 		ResourceCache.AssetBundleResource.LocalPathFromFile = localPathFromFile;
+	}
+
+	private void promiseExceptionHandler(object sender, ExceptionEventArgs e)
+	{
+		Debug.LogException(e.Exception);
 	}
 
 	ResourceCache.FileInfo localPathFromFile(string path)
@@ -99,7 +108,21 @@ public class GameScene : MonoBehaviour
 		var cr = obj.GetComponent<CardRenderer>();
 		cardRenderers_.Add(card.Id, cr);
 		cr.Redraw(card);
+		cr.OnClick = onCardClick;
 		return card;
+	}
+
+	public CardRenderer CreateCardRenderer(GameObject parent, Card card)
+	{
+		var obj = CardPool.Create(parent);
+		var cr = obj.GetComponent<CardRenderer>();
+		cr.Redraw(card);
+		return cr;
+	}
+
+	public void ReleaseCardRenderer(GameObject obj)
+	{
+		CardPool.Release(obj);
 	}
 
 	public CardRenderer FindCardRenderer(Card card) => cardRenderers_[card.Id];
@@ -187,10 +210,8 @@ public class GameScene : MonoBehaviour
 		}
 	}
 
-	public void OnCardClick(GameObject target)
+	void onCardClick(Card card)
 	{
-		var id = target.GetId();
-		var card = Field.FindCard(id);
 		switch( card.Place )
 		{
 			case CardPlace.Hands:
@@ -213,6 +234,11 @@ public class GameScene : MonoBehaviour
 	{
 		Send(new GameLog.TurnEndRequest { });
 		//CommonDialog.Open("HOGE?").Done(n => Debug.Log("Done " + n));
+	}
+
+	public void OnTestClick()
+	{
+		CardSelector.Open("えらんでね", Field.Stack).Done(card => { Debug.Log(card.T.Name); });
 	}
 
 	int CardWidth = 160;

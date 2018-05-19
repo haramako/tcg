@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Game;
@@ -14,6 +15,8 @@ public class CardRenderer : MonoBehaviour
 	public Text CostText;
 
 	public Card Card { get; private set; }
+
+	public Action<Card> OnClick;
 
 	public void Redraw(Card card)
 	{
@@ -38,6 +41,14 @@ public class CardRenderer : MonoBehaviour
 			{
 				CardImage.sprite = spr;
 			});
+		}
+	}
+
+	public void OnCardClick(GameObject target)
+	{
+		if( OnClick != null)
+		{
+			OnClick(Card);
 		}
 	}
 

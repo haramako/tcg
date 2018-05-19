@@ -68,35 +68,186 @@ enum PlatformType {
  * カードの情報
  */
 message CardTemplate {
+	/**
+	* カード種別
+	*/
+	enum CardType 
+	{
+		Attack = 0;
+		Skill = 1;
+	}
+ 
 	int32 id = 1;
 	string name = 2;
 	string desc = 3;
 	int32 image_id = 4;
 	int32 cost = 5; /// コスト
 	repeated SpecialTemplate special_template = 6; // 効果
+	repeated CardType type = 7;
 }
 
+/**
+ * カードの場所
+ */
+enum CardLocation
+{
+	NoneCardLocation = 0; /// 未指定
+	Hand = 1; /// 手札
+	Stack = 2; /// 山札
+	Grave = 3; /// 捨て札
+}
+ 
+/**
+ *　能力の種類
+ */
 enum SpecialType {
 	/**
 	 * 攻撃を行う
+	 *
+	 * attack(10) => ダメージ(10)
 	 */
 	Attack = 0;
+
 	/**
 	 * ブロックを加算する
+	 *
+	 * defense(10) => ブロック(10)
 	 */
 	Defense = 1;
+
 	/**
 	 * カードを引く
+	 * draw(2) => 2枚カードを引く
 	 */
 	Draw = 2;
+
+	/**
+	 * 弱体を付与する
+	 *
+	 * weak(3)
+	 */
+	Weak = 3;
+
+	/**
+	 * 筋力を上げる
+	 */
+	PowerUp = 5;
+
+	/**
+	 * 筋力を下げる
+	 */
+	PowerDown = 6;
+
+	/**
+	 * 任意のカードを{手札|すて札|山札}に追加
+	 * 
+	 * add_card(card_id: 101, location: stack)
+	 */
+	AddCard = 7;
+
+	/**
+	 * 廃棄
+	 *
+	 * discard()
+	 */
+	Discard = 8;
+
+	/**
+	 * カードのコピーを特定の場所に追加
+	 * 
+	 * clone_card(location:stack) => カードを山札に追加
+	 * clone_card(amount:2, location:grave) => カードを捨て札に2枚追加
+	 */
+	CloneCard = 9;
+
+	/**
+	 * マナを得る
+	 * 
+	 * add_mana(2) => マナを２追加
+	 */
+	AddMana = 10;
+
+	/**
+	 * HPを得る
+	 * 
+	 * add_hp(2) => HPを２得る
+	 * add_hp(-4) => HPを４失う
+	 */
+	AddHp = 11;
+
+	/**
+	 * 任意のカードを特定の場所に置く
+	 *
+	 * optにrandomを指定すると、任意ではなく、ランダムのカードが対象となる
+	 *
+	 * move_card(location: hand, location_to: stack) => 手札から捨て札に移動
+	 * move_card(2, random, location: discard, location_to: hand) => 捨て札から手札にランダムで2枚移動
+	 */
+	MoveCard = 12;
+
+	/**
+	 *
+	 */
+
+	/**
+	 * 手札がすべて~の場合に使用可
+	 *
+	 * if_card_all(card_type:offence)
+	 */
+	IfCardAll = 100;
+
+	/*
+	{*}の場合
+	戦闘でHPを失うたび、●消費が-1
+	{カード種類}以外の手札を廃棄する
+	カードを任意で捨てる
+
+	このターンにカードを捨てていれば、▲▲を得る
+	毒
+	このターンに使用した{カード種類}xNのダメージを与える
+	山札にカードがない時だけ使用可能
+	次のターン、引くカードが2枚増える。
+	
+	*/
 }
 
 /**
  *
  */
 message SpecialTemplate {
+	enum Option {
+		Random = 0; /// 特定のカードではなく、ランダムに選択する
+	}
+	/**
+	 * カウンターの種類
+	 */
+	enum CounterType {
+		UsedInTurn = 0; /// このターンに使ったカード
+		InHand = 1; /// 手札の中のカードの枚数
+		Mana = 2; /// 残りのマナすべて
+	}
+	/**
+	 * なにかの数を数えるカウンター
+	 *
+	 * used_in_turn(card_type: attack) => このターンに使ったアタックカードの数
+	 * in_hand(2, card_id: 999) => 手札の中の999のカード x 2
+	 * mana(5) => 残りのマナすべてx5
+	 */
+	message Counter {
+		CounterType type = 1;
+		int32 multiply = 2;
+		repeated CardTemplate.CardType card_type = 3;
+		int32 card_id = 4;
+	}
+
 	SpecialType type = 1;
 	int32 amount = 2;
+	repeated Option opt = 3;
+	repeated CardTemplate.CardType card_type = 8;
+	int32 card_id = 4;
+	CardLocation location = 5;
+	CardLocation location_to = 7;
+	Counter counter = 6; /// ***の枚数xNのようなものを表すもの
 }
 
 //===========================================

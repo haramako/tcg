@@ -10,14 +10,15 @@ namespace Game.Specials
 	{
 		public override void Execute(Field f, SpecialParam p)
 		{
-			f.ShowMessage(Marker.T("{0}のダメージ！").Format(T.Amount));
-			p.Target.Hp -= T.Amount;
+			var amount = GetAmount(f, p);
+			f.ShowMessage(Marker.T("{0}のダメージ！").Format(amount));
+			p.Target.Hp -= amount;
 			Playing.Redraw(f);
 		}
 
 		public override TextMarker GetDesc()
 		{
-			return Marker.T("ダメージ({0})").Format(T.Amount);
+			return Marker.T("{0}のダメージ").Format(GetAmountDesc().Text);
 		}
 	}
 
@@ -25,14 +26,15 @@ namespace Game.Specials
 	{
 		public override void Execute(Field f, SpecialParam p)
 		{
-			f.ShowMessage(Marker.T("{0}のブロック！").Format(T.Amount));
-			p.Executer.IncrementStatus(CharacterStatus.Block, T.Amount);
+			var amount = GetAmount(f, p);
+			f.ShowMessage(Marker.T("{0}のブロック！").Format(amount));
+			p.Executer.IncrementStatus(CharacterStatus.Block, amount);
 			Playing.Redraw(f);
 		}
 
 		public override TextMarker GetDesc()
 		{
-			return Marker.T("ブロック({0})").Format(T.Amount);
+			return Marker.T("{0}のブロック").Format(GetAmountDesc().Text);
 		}
 	}
 
@@ -52,4 +54,29 @@ namespace Game.Specials
 			return Marker.T("{0}枚カードを引く").Format(T.Amount);
 		}
 	}
+
+	public class MoveSelectedCard : Special
+	{
+		public override void Execute(Field f, SpecialParam p)
+		{
+		}
+
+		public override TextMarker GetDesc()
+		{
+			return Marker.T("");
+		}
+	}
+
+	#if false // テンプレート
+	public class Draw : Special
+	{
+		public override void Execute(Field f, SpecialParam p)
+		{
+		}
+
+		public override TextMarker GetDesc()
+		{
+		}
+	}
+	#endif
 }
