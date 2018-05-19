@@ -15,10 +15,6 @@ namespace Master
 
 		public void OnLoaded()
 		{
-			foreach (var t in SpecialTemplate)
-			{
-				Logger.Info("{0} {1}", Name, t.Type);
-			}
 			Special = SpecialTemplate.Select(t => Game.Special.Create(t)).ToArray();
 		}
 	}

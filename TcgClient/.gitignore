@@ -5,3 +5,8 @@
 *.csproj
 *.sln
 *.userprefs
+
+/Assets/StreamingAssets*
+/*.exe
+/*_Data
+/*.Dll

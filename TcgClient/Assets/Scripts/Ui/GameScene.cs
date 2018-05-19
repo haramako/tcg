@@ -38,6 +38,15 @@ public class GameScene : MonoBehaviour
 	{
 		Configure.Init();
 		ResourceCache.Init();
+		ResourceCache.AssetBundleResource.LocalPathFromFile = localPathFromFile;
+	}
+
+	ResourceCache.FileInfo localPathFromFile(string path)
+	{
+		return new ResourceCache.FileInfo
+		{
+			Path = Path.Combine(Application.streamingAssetsPath, ResourceCache.PlatformDir(), path)
+		};
 	}
 
 	void Start ()
