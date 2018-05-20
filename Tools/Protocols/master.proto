@@ -122,21 +122,12 @@ enum SpecialType {
 	Draw = 2;
 
 	/**
-	 * 弱体を付与する
+	 * 状態異常を付与する
 	 *
-	 * weak(3)
+	 * add_status(3, status:weak) => 弱体(3)を付与
+	 * add_status(5, status:power_up) => 強化(5)を付与
 	 */
-	Weak = 3;
-
-	/**
-	 * 筋力を上げる
-	 */
-	PowerUp = 5;
-
-	/**
-	 * 筋力を下げる
-	 */
-	PowerDown = 6;
+	AddStatus = 3;
 
 	/**
 	 * 任意のカードを{手札|すて札|山札}に追加
@@ -248,6 +239,7 @@ message SpecialTemplate {
 	CardLocation location = 5;
 	CardLocation location_to = 7;
 	Counter counter = 6; /// ***の枚数xNのようなものを表すもの
+	repeated CharacterStatus status = 9; /// 対象のステータス(複数可)
 
 }
 
@@ -261,6 +253,12 @@ message SpecialTemplate {
 enum CharacterStatus {
 	NoneCharacterStatus = 0; /// なし
 	Block = 1; /// ブロック
+	AttackUp = 2; /// 攻撃アップ
+	AttackDown = 3; /// 攻撃ダウン
+	DefenseUp = 4; /// 防御アップ
+	DefenseDown = 5; /// 防御ダウン
+	Strength = 6; /// 筋力
+	Agility = 7; /// 敏捷
 }
 
 /**

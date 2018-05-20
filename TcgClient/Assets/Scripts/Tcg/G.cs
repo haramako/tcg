@@ -152,5 +152,12 @@ namespace Game
 			MessageFusions_ = null;
 			readOnlyMessageFusions_ = null;
 		}
+
+		public static StatusInfo FindStatusInfo(CharacterStatus stat) => FindStatusInfoById((int)stat);
+
+		public static TextMarker DisplayName(CardLocation v)
+		{
+			return new TextMarker(0, "CardLocation." + v);
+		}
 	}
 }

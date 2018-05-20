@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System;
+using Master;
 
 namespace Game
 {
@@ -276,6 +277,24 @@ namespace Game
 		{
 			removeCard(card);
 			card.place_ = CardPlace.Temp;
+		}
+
+		public void MoveToLocation(CardLocation location, Card card)
+		{
+			switch( location)
+			{
+				case CardLocation.Hand:
+					MoveToHands(card);
+					break;
+				case CardLocation.Stack:
+					MoveToStack(card);
+					break;
+				case CardLocation.Grave:
+					MoveToGrave(card);
+					break;
+				default:
+					throw new InvalidOperationException("Unkown location " + location);
+			}
 		}
 
 		//===================================================

@@ -47,6 +47,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     optional :location, :enum, 5, "Master.CardLocation"
     optional :location_to, :enum, 7, "Master.CardLocation"
     optional :counter, :message, 6, "Master.SpecialTemplate.Counter"
+    repeated :status, :enum, 9, "Master.CharacterStatus"
   end
   add_message "Master.SpecialTemplate.Counter" do
     optional :type, :enum, 1, "Master.SpecialTemplate.CounterType"
@@ -105,9 +106,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     value :Attack, 0
     value :Defense, 1
     value :Draw, 2
-    value :Weak, 3
-    value :PowerUp, 5
-    value :PowerDown, 6
+    value :AddStatus, 3
     value :AddCard, 7
     value :Discard, 8
     value :CloneCard, 9
@@ -119,6 +118,12 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   add_enum "Master.CharacterStatus" do
     value :NoneCharacterStatus, 0
     value :Block, 1
+    value :AttackUp, 2
+    value :AttackDown, 3
+    value :DefenseUp, 4
+    value :DefenseDown, 5
+    value :Strength, 6
+    value :Agility, 7
   end
   add_enum "Master.StatusGroup" do
     value :NoStatusGroup, 0

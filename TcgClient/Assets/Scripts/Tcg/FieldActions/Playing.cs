@@ -20,6 +20,7 @@ namespace Game
 			if (ok)
 			{
 				f.MoveToGrave(card);
+				Playing.Redraw(f);
 			}
 			else
 			{
@@ -44,6 +45,5 @@ namespace Game
 		{
 			f.SendAndWait(new GameLog.Redraw());
 		}
-
 	}
 }

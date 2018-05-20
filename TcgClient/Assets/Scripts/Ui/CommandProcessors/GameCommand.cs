@@ -55,4 +55,11 @@ public partial class CommandProcessor
 			return Promise.Resolved();
 		});
 	}
+
+	public static IPromise ProcessAddCard(GameScene scene, AddCard com)
+	{
+		var card = scene.Field.FindCard(com.CardId);
+		scene.AddCardToField(card);
+		return Promise.Resolved();
+	}
 }

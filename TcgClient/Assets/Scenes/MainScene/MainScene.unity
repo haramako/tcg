@@ -722,7 +722,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.000015258729, y: -0.06737622}
+  m_AnchoredPosition: {x: 0.000015258729, y: 0.000040886618}
   m_SizeDelta: {x: 904, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &536093935
@@ -858,7 +858,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 04c02019e3c0873408d154a7c5ecb5f6, type: 3}
-    m_FontSize: 10
+    m_FontSize: 12
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -2521,8 +2521,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 21.55}
-  m_SizeDelta: {x: 0, y: 43.1}
+  m_AnchoredPosition: {x: 0, y: 24.7}
+  m_SizeDelta: {x: 0, y: 49.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1325711347
 MonoBehaviour:
@@ -3215,8 +3215,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -366, y: 73.8}
-  m_SizeDelta: {x: 237.8, y: 244.8}
+  m_AnchoredPosition: {x: -294, y: 73.8}
+  m_SizeDelta: {x: 381.9, y: 244.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1643875907
 MonoBehaviour:
@@ -3263,7 +3263,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
+    m_LineSpacing: 0.6
   m_Text: 'HP: 99
 
 '
@@ -3454,7 +3454,7 @@ GameObject:
   - component: {fileID: 1763705679}
   - component: {fileID: 1763705678}
   m_Layer: 5
-  m_Name: TurnEndButton (1)
+  m_Name: TestButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3476,7 +3476,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -387, y: -3.2}
+  m_AnchoredPosition: {x: 564.7001, y: 287}
   m_SizeDelta: {x: 114.5, y: 65.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1763705678
@@ -3753,7 +3753,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u30BF\u30FC\u30F3\u7D42\u4E86"
+  m_Text: "\u30C6\u30B9\u30C8"
 --- !u!222 &1775309175
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3792,7 +3792,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000022888, y: -181.30005}
+  m_AnchoredPosition: {x: 33, y: -224.95}
   m_SizeDelta: {x: 1040.9, y: 240}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1882593211
@@ -4264,8 +4264,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 260, y: 58}
-  m_SizeDelta: {x: 186, y: 276.3}
+  m_AnchoredPosition: {x: 336.8, y: 58}
+  m_SizeDelta: {x: 339.6, y: 276.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2097441684
 MonoBehaviour:
@@ -4312,7 +4312,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
+    m_LineSpacing: 0.6
   m_Text: 'HP: 99
 
 '

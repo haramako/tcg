@@ -38,9 +38,7 @@ namespace Master {
     Attack = 0,
     Defense = 1,
     Draw = 2,
-    Weak = 3,
-    PowerUp = 5,
-    PowerDown = 6,
+    AddStatus = 3,
     AddCard = 7,
     Discard = 8,
     CloneCard = 9,
@@ -53,6 +51,12 @@ namespace Master {
   public enum CharacterStatus {
     NoneCharacterStatus = 0,
     Block = 1,
+    AttackUp = 2,
+    AttackDown = 3,
+    DefenseUp = 4,
+    DefenseDown = 5,
+    Strength = 6,
+    Agility = 7,
   }
 
   public enum StatusGroup {
@@ -969,6 +973,8 @@ namespace Master {
 
     public global::Master.SpecialTemplate.Types.Counter Counter;
 
+    public List<global::Master.CharacterStatus> Status = new List<global::Master.CharacterStatus>();
+
     #region Lite runtime methods
     #endregion
 
@@ -995,6 +1001,8 @@ namespace Master {
         output.WriteEnum(7, (int) LocationTo, LocationTo);
       }
       if (CardType.Count > 0) {
+      }
+      if (Status.Count > 0) {
       }
     }
 
@@ -1045,6 +1053,17 @@ namespace Master {
       }
       if( Counter != null ){
         size += pb::CodedOutputStream.ComputeMessageSize(6, Counter);
+      }
+      {
+        int dataSize = 0;
+        if (Status.Count > 0) {
+          foreach (global::Master.CharacterStatus element in Status) {
+            dataSize += pb::CodedOutputStream.ComputeEnumSizeNoTag((int) element);
+          }
+          size += dataSize;
+          size += 1;
+          size += pb::CodedOutputStream.ComputeRawVarint32Size((uint) dataSize);
+        }
       }
       return size;
     }
@@ -1106,6 +1125,11 @@ namespace Master {
             input.ReadEnumArray<global::Master.CardTemplate.Types.CardType>(tag, this.CardType);
             break;
           }
+          case 74:
+          case 72: {
+            input.ReadEnumArray<global::Master.CharacterStatus>(tag, this.Status);
+            break;
+          }
         }
       }
     }
@@ -1121,6 +1145,9 @@ namespace Master {
     }
     if( Counter == null ){
       Counter = global::Master.SpecialTemplate.Types.Counter.CreateInstance();
+    }
+    if( Status == null ){
+      Status = new List<global::Master.CharacterStatus>();
     }
     }
   }

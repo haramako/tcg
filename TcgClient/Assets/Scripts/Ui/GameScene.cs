@@ -76,12 +76,14 @@ public class GameScene : MonoSingleton<GameScene>
 
 		for( int i = 0; i < Config.DefaultDrawCount; i++)
 		{
-			Field.MoveToHands(AddCardToField(randCard()));
+			var card = AddCardToField(Field.AddCard(randCard()));
+			Field.MoveToHands(card);
 		}
 
 		for (int i = 0; i < Config.DefaultDeckCount - Config.DefaultDrawCount; i++ )
 		{
-			Field.MoveToStack(AddCardToField(randCard()));
+			var card = AddCardToField(Field.AddCard(randCard()));
+			Field.MoveToStack(card);
 		}
 
 		redraw();
@@ -103,7 +105,6 @@ public class GameScene : MonoSingleton<GameScene>
 
 	public Card AddCardToField(Card card)
 	{
-		Field.AddCard(card);
 		var obj = CardPool.Create(FieldHolder);
 		var cr = obj.GetComponent<CardRenderer>();
 		cardRenderers_.Add(card.Id, cr);

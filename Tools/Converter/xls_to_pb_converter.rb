@@ -78,6 +78,7 @@ class XlsToPbConverter
     conv = PbConverter.new(@logger)
     data = Excel.read_from_file(path, book, sheet)
     data = data.reject { |row| row[:unused] } # unusedが指定された行は使用しない
+    data.each { |row| row.delete(:unused) } # unusedが指定された行は使用しない
     items = data.map do |row|
       conv.conv_message(item_type, row)
     end

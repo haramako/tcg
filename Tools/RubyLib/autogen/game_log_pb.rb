@@ -32,6 +32,9 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   add_message "GameLog.SelectCard" do
     optional :out_card_id, :int32, 1
   end
+  add_message "GameLog.AddCard" do
+    optional :card_id, :int32, 1
+  end
 end
 
 module GameLog
@@ -46,4 +49,5 @@ module GameLog
   CardPlayed = Google::Protobuf::DescriptorPool.generated_pool.lookup("GameLog.CardPlayed").msgclass
   FocusCard = Google::Protobuf::DescriptorPool.generated_pool.lookup("GameLog.FocusCard").msgclass
   SelectCard = Google::Protobuf::DescriptorPool.generated_pool.lookup("GameLog.SelectCard").msgclass
+  AddCard = Google::Protobuf::DescriptorPool.generated_pool.lookup("GameLog.AddCard").msgclass
 end
