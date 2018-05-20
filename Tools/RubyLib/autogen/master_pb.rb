@@ -113,7 +113,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     value :CloneCard, 9
     value :AddMana, 10
     value :AddHp, 11
-    value :MoveSelectedCard, 12
+    value :MoveCard, 12
     value :IfCardAll, 100
   end
   add_enum "Master.CharacterStatus" do

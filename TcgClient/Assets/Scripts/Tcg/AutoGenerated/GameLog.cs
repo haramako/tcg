@@ -651,6 +651,77 @@ namespace GameLog {
     }
   }
 
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  public sealed partial class SelectCard : pb.Message {
+    public SelectCard() { }
+    public static SelectCard CreateInstance() { var obj = new SelectCard(); obj.Finish(); return obj; }
+    public static SelectCard CreateEmpty() { return new SelectCard(); }
+    private static readonly SelectCard defaultInstance = new SelectCard();
+    public static SelectCard DefaultInstance {
+      get { return defaultInstance; }
+    }
+
+    public int OutCardId;
+
+    #region Lite runtime methods
+    #endregion
+
+    public override void WriteTo(pb::CodedOutputStream output) {
+      CalcSerializedSize();
+      if (OutCardId != 0) {
+        output.WriteInt32(1, OutCardId);
+      }
+    }
+
+    public override int SerializedSize {
+      get {
+        return CalcSerializedSize();
+      }
+    }
+
+    private int CalcSerializedSize() {
+      int size = 0;
+      if (OutCardId != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(1, OutCardId);
+      }
+      return size;
+    }
+    public static SelectCard ParseFrom(byte[] data) {
+      var mes = CreateInstance(); mes.MergeFrom(data); return mes;
+    }
+    public static SelectCard ParseFrom(global::System.IO.Stream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public static SelectCard ParseFrom(pb::CodedInputStream input) {
+      var mes = CreateInstance(); mes.MergeFrom(input); return mes;
+    }
+    public override void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while (input.ReadTag(out tag)) {
+        switch (tag) {
+          case 0: {
+            throw pb::InvalidProtocolBufferException.InvalidTag();
+          }
+          default: {
+            if (pb::WireFormat.IsEndGroupTag(tag)) {
+              return;
+            }
+            break;
+          }
+          case 8: {
+            input.ReadInt32(ref this.OutCardId);
+            break;
+          }
+        }
+      }
+    }
+
+    public override void Init() {
+    }
+    public override void Finish() {
+    }
+  }
+
   #endregion
 
 }

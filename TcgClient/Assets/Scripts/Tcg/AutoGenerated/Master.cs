@@ -46,7 +46,7 @@ namespace Master {
     CloneCard = 9,
     AddMana = 10,
     AddHp = 11,
-    MoveSelectedCard = 12,
+    MoveCard = 12,
     IfCardAll = 100,
   }
 

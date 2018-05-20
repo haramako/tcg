@@ -55,10 +55,15 @@ namespace Game.Specials
 		}
 	}
 
-	public class MoveSelectedCard : Special
+	public class MoveCard : Special
 	{
 		public override void Execute(Field f, SpecialParam p)
 		{
+			var req = new GameLog.SelectCard();
+			f.SendAndWait(req);
+			var card = f.FindCard(req.OutCardId);
+			f.MoveToHands(card);
+			Playing.Redraw(f);
 		}
 
 		public override TextMarker GetDesc()

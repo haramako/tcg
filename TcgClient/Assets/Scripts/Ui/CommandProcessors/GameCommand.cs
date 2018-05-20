@@ -46,4 +46,13 @@ public partial class CommandProcessor
 		scene.ShowMessage(Marker.RawText(com.Text));
 		return Promise.Resolved();
 	}
+
+	public static IPromise ProcessSelectCard(GameScene scene, SelectCard com)
+	{
+		return CardSelector.Open(Marker.T("えらんでね").Text, scene.Field.Stack).Then(card =>
+		{
+			com.OutCardId = card.Id;
+			return Promise.Resolved();
+		});
+	}
 }

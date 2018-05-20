@@ -248,6 +248,7 @@ message SpecialTemplate {
 	CardLocation location = 5;
 	CardLocation location_to = 7;
 	Counter counter = 6; /// ***の枚数xNのようなものを表すもの
+
 }
 
 //===========================================

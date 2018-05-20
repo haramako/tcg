@@ -41,3 +41,7 @@ message CardPlayed {
 message FocusCard {
 	int32 card_id = 1;
 }
+
+message SelectCard {
+	int32 out_card_id = 1;
+}
