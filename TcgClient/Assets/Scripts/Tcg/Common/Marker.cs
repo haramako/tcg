@@ -29,6 +29,8 @@ namespace Game
 			}
 		}
 
+		public override string ToString() => Text;
+
 		public string OriginalText
 		{
 			get

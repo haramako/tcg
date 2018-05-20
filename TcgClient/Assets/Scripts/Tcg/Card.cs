@@ -48,12 +48,32 @@ namespace Game
 
 		public bool Reversed;
 
-		public void ExecuteSpecial(Field f, SpecialParam param)
+		public bool ExecuteSpecial(Field f, SpecialParam param)
 		{
-			foreach( var special in T.Special)
+			foreach (var special in T.Special)
+			{
+				var ok = special.IsPlayable(f, param);
+				if (!ok)
+				{
+					return false;
+				}
+			}
+
+			foreach (var special in T.Special)
+			{
+				var ok = special.Prepare(f, param);
+				if( !ok )
+				{
+					return false;
+				}
+			}
+
+			foreach ( var special in T.Special)
 			{
 				special.Execute(f, param);
 			}
+
+			return true;
 		}
 
 		public string GetDesc()

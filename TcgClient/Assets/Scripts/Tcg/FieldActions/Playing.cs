@@ -15,10 +15,16 @@ namespace Game
 
 			f.FieldInfo.Mana -= card.T.Cost;
 			var param = new SpecialParam { Card = card, Executer = f.Player, Target = f.Enemy };
-			card.ExecuteSpecial(f, param);
+			var ok = card.ExecuteSpecial(f, param);
 
-			f.MoveToGrave(card);
-			Playing.Redraw(f);
+			if (ok)
+			{
+				f.MoveToGrave(card);
+			}
+			else
+			{
+				Playing.Redraw(f);
+			}
 		}
 
 		static public void Draw(Field f)

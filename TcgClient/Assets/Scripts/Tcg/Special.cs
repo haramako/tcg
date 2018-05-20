@@ -9,6 +9,8 @@ namespace Game
 		public Card Card;
 		public Character Target;
 		public Character Executer;
+
+		public List<Card> PreparedSelectedCard;
 	}
 
 	/// <summary>
@@ -35,6 +37,16 @@ namespace Game
 					// UnityEngine.Debug.LogError("Game.Thinkings." + name + " not found");
 				}
 			}
+		}
+
+		public virtual bool IsPlayable(Field f, SpecialParam p)
+		{
+			return true;
+		}
+
+		public virtual bool Prepare(Field f, SpecialParam p)
+		{
+			return true;
 		}
 
 		public virtual void Execute(Field f, SpecialParam p)

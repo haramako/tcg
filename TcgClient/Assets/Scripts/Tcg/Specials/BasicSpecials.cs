@@ -57,18 +57,36 @@ namespace Game.Specials
 
 	public class MoveCard : Special
 	{
-		public override void Execute(Field f, SpecialParam p)
+		public override bool IsPlayable(Field f, SpecialParam p)
+		{
+			if (f.Stack.Count <= 0)
+			{
+				return false;
+			}
+			return true;
+		}
+
+		public override bool Prepare(Field f, SpecialParam p)
 		{
 			var req = new GameLog.SelectCard();
 			f.SendAndWait(req);
 			var card = f.FindCard(req.OutCardId);
-			f.MoveToHands(card);
+			p.PreparedSelectedCard = new List<Card> { card };
+			return true;
+		}
+
+		public override void Execute(Field f, SpecialParam p)
+		{
+			foreach (var card in p.PreparedSelectedCard)
+			{
+				f.MoveToHands(card);
+			}
 			Playing.Redraw(f);
 		}
 
 		public override TextMarker GetDesc()
 		{
-			return Marker.T("");
+			return Marker.T("カードを{0}枚選んで{1}に加える").Format(GetAmountDesc(), "手札");
 		}
 	}
 
