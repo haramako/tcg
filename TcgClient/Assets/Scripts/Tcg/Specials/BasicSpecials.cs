@@ -138,6 +138,54 @@ namespace Game.Specials
 		}
 	}
 
+	public class Discard : Special
+	{
+		public override void Execute(Field f, SpecialParam p)
+		{
+			p.ResultDiscard = true;
+		}
+
+		public override TextMarker GetDesc()
+		{
+			return Marker.T("破棄");
+		}
+	}
+
+	public class CloneCard : Special
+	{
+		public override void Execute(Field f, SpecialParam p)
+		{
+			var amount = GetAmount(f, p);
+			for (int i = 0; i < amount; i++)
+			{
+				var card = CardMoving.AddCard(f, p.Card.T.Id);
+				f.MoveToLocation(T.Location, card);
+			}
+			Playing.Redraw(f);
+		}
+
+		public override TextMarker GetDesc()
+		{
+			return Marker.T("コピーを{0}枚{1}に加える").Format(GetAmountDesc(), G.DisplayName(T.Location));
+		}
+	}
+
+	public class AddMana : Special
+	{
+		public override void Execute(Field f, SpecialParam p)
+		{
+			var amount = GetAmount(f, p);
+			f.FieldInfo.Mana += amount;
+			Playing.Redraw(f);
+		}
+
+		public override TextMarker GetDesc()
+		{
+			return Marker.T("マナを{0}に得る").Format(GetAmountDesc());
+		}
+	}
+
+
 	#if false // テンプレート
 	public class Draw : Special
 	{

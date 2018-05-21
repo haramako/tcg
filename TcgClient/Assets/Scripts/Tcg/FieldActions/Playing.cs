@@ -11,6 +11,8 @@ namespace Game
 			Logger.Assert(card.IsHands);
 			Logger.Assert(f.FieldInfo.Mana >= card.T.Cost);
 
+			f.Validate();
+
 			f.SendAndWait(new GameLog.FocusCard { CardId = card.Id });
 
 			f.FieldInfo.Mana -= card.T.Cost;
@@ -19,13 +21,22 @@ namespace Game
 
 			if (ok)
 			{
-				f.MoveToGrave(card);
+				if (param.ResultDiscard)
+				{
+					f.MoveToDiscarded(card);
+				}
+				else
+				{
+					f.MoveToGrave(card);
+				}
 				Playing.Redraw(f);
 			}
 			else
 			{
 				Playing.Redraw(f);
 			}
+
+			f.Validate();
 		}
 
 		static public void Draw(Field f)

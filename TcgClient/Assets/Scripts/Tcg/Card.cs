@@ -11,6 +11,7 @@ namespace Game
 		Hands,
 		Stack,
 		Grave,
+		Discarded,
 		Opened,
 	};
 

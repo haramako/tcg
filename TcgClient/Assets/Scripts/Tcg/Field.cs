@@ -38,6 +38,11 @@ namespace Game
 		public IReadOnlyList<Card> Grave => RawGrave;
 
 		/// <summary>
+		/// 破棄札
+		/// </summary>
+		public IReadOnlyList<Card> Discarded => RawDiscarded;
+
+		/// <summary>
 		/// オープンされたカード
 		/// </summary>
 		public IReadOnlyList<Card> Opened => RawOpened;
@@ -68,6 +73,11 @@ namespace Game
 		List<Card> RawGrave => grave_;
 
 		/// <summary>
+		/// 破棄札(編集用のアクセスが必要な時のみ使用して、基本は使わない)
+		/// </summary>
+		List<Card> RawDiscarded => discarded_;
+
+		/// <summary>
 		/// オープンされたカード(編集用のアクセスが必要な時のみ使用して、基本は使わない)
 		/// </summary>
 		List<Card> RawOpened => opened_;
@@ -81,6 +91,7 @@ namespace Game
 		List<Card> hands_ = new List<Card>();
 		List<Card> stack_ = new List<Card>();
 		List<Card> grave_ = new List<Card>();
+		List<Card> discarded_ = new List<Card>();
 		List<Card> opened_ = new List<Card>();
 
 		/// <summary>
@@ -139,6 +150,9 @@ namespace Game
 					break;
 				case CardPlace.Grave:
 					removed = grave_.Remove(card);
+					break;
+				case CardPlace.Discarded:
+					removed = discarded_.Remove(card);
 					break;
 				case CardPlace.Opened:
 					removed = opened_.Remove(card);
@@ -266,6 +280,13 @@ namespace Game
 			card.place_ = CardPlace.Grave;
 		}
 
+		public void MoveToDiscarded(Card card, int idx = -1)
+		{
+			removeCard(card);
+			insert(discarded_, card, idx);
+			card.place_ = CardPlace.Discarded;
+		}
+
 		public void MoveToOpened(Card card, int idx = -1)
 		{
 			removeCard(card);
@@ -331,6 +352,14 @@ namespace Game
 				}
 			}
 
+			foreach (var card in discarded_)
+			{
+				if (card.Place != CardPlace.Discarded)
+				{
+					throw new Exception(string.Format("Card {0} must in discarded, but not found", card.Id));
+				}
+			}
+
 			foreach (var card in opened_)
 			{
 				if (card.Place != CardPlace.Opened)
@@ -342,10 +371,10 @@ namespace Game
 			// 全てのカードが AllCards に含まれているか確認する
 			if (!allowTemp)
 			{
-				if (allCards_.Count != hands_.Count + stack_.Count + opened_.Count)
+				if (allCards_.Count != hands_.Count + stack_.Count + grave_.Count + discarded_.Count + opened_.Count)
 				{
-					throw new Exception(string.Format("Card count is invalid, all={0}, hands={1}, stack={2}, opened={3}",
-													  allCards_.Count, hands_.Count, stack_.Count, opened_.Count));
+					throw new Exception(string.Format("Card count is invalid, all={0}, hands={1}, stack={2}, grave={3}, discarded={4}, opened={5}",
+													  allCards_.Count, hands_.Count, stack_.Count, grave_.Count, discarded_.Count, opened_.Count));
 				}
 			}
 

@@ -157,7 +157,23 @@ namespace Game
 
 		public static TextMarker DisplayName(CardLocation v)
 		{
-			return new TextMarker(0, "CardLocation." + v);
+			return DisplayNameCache<CardLocation>.GetData(v);
 		}
+
+		class DisplayNameCache<T>
+		{
+			static Dictionary<T, TextMarker> data = new Dictionary<T, TextMarker>();
+			public static TextMarker GetData(T v)
+			{
+				TextMarker found;
+				if( !data.TryGetValue(v, out found))
+				{
+					found = new TextMarker(0, typeof(T).Name + "." + v);
+					data[v] = found;
+				}
+				return found;
+			}
+		}
+
 	}
 }

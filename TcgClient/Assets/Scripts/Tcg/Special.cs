@@ -10,7 +10,11 @@ namespace Game
 		public Character Target;
 		public Character Executer;
 
+		// Prepareで更新するもの
 		public List<Card> PreparedSelectedCard;
+
+		// 結果として返すもの
+		public bool ResultDiscard;
 	}
 
 	/// <summary>

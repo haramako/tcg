@@ -209,6 +209,14 @@ public class GameScene : MonoSingleton<GameScene>
 			}
 			i++;
 		}
+
+		i = 0;
+		foreach (var card in Field.Discarded)
+		{
+			var cr = FindCardRenderer(card);
+			cr.gameObject.SetActive(false);
+			i++;
+		}
 	}
 
 	void onCardClick(Card card)
