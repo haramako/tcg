@@ -15,12 +15,15 @@ using Master;
 public class GameScene : MonoSingleton<GameScene>
 {
 	public PoolBehaviour CardPool;
+	public PoolBehaviour EnemyPool;
+
 	public GameObject FieldHolder;
 
 	public Graphic HandHolder;
 	public Graphic StackHolder;
 	public Graphic GraveHolder;
 	public Graphic OpenedHolder;
+	public Graphic EnemyHolder;
 
 	public Text StackNumText;
 	public Text GraveNumText;
@@ -33,6 +36,7 @@ public class GameScene : MonoSingleton<GameScene>
 	public Field Field;
 
 	public Dictionary<int, CardRenderer> cardRenderers_ = new Dictionary<int, CardRenderer>();
+	public Dictionary<int, EnemyRenderer> enemyRenderers_ = new Dictionary<int, EnemyRenderer>();
 
 	protected override void Awake()
 	{
@@ -58,7 +62,7 @@ public class GameScene : MonoSingleton<GameScene>
 		};
 	}
 
-	void Start ()
+	IEnumerator Start ()
 	{
 		G.Initialize(new LocalFileSystem(Path.Combine("..", "Output")));
 		G.LoadAll();
@@ -86,10 +90,20 @@ public class GameScene : MonoSingleton<GameScene>
 			Field.MoveToStack(card);
 		}
 
+		foreach( var c in Field.Characters )
+		{
+			if (c.Id == 1)
+			{
+				continue;
+			}
+			var er = CreateEnemyRenderer(EnemyHolder.gameObject, c);
+			yield return er.LoadResource(c).AsCoroutine();
+		}
+
 		redraw();
 	}
 
-	void OnDestroy()
+	protected override void OnDestroy()
 	{
 		if( Field != null )
 		{
@@ -129,6 +143,23 @@ public class GameScene : MonoSingleton<GameScene>
 	public CardRenderer FindCardRenderer(Card card) => cardRenderers_[card.Id];
 	public CardRenderer FindCardRenderer(int cardId) => cardRenderers_[cardId];
 
+	public EnemyRenderer CreateEnemyRenderer(GameObject parent, Character character)
+	{
+		var obj = EnemyPool.Create(parent);
+		var er = obj.GetComponent<EnemyRenderer>();
+		enemyRenderers_[character.Id] = er;
+		//er.Redraw(character);
+		return er;
+	}
+
+	public void ReleaseEnemyRenderer(GameObject obj)
+	{
+		EnemyPool.Release(obj);
+	}
+
+	public EnemyRenderer FindEnemyRenderer(Character character) => enemyRenderers_[character.Id];
+	public EnemyRenderer FindEnemyRenderer(int characterId) => enemyRenderers_[characterId];
+
 	public void Redraw() => redraw();
 
 	void redraw()
@@ -140,7 +171,7 @@ public class GameScene : MonoSingleton<GameScene>
 		CostText.text = "" + Field.FieldInfo.Mana;
 
 		PlayerInfoText.text = GetCharacterStatus(Field.Player);
-		EnemyInfoText.text = GetCharacterStatus(Field.Enemy);
+		EnemyInfoText.text = GetCharacterStatus(Field.Characters[1]);
 	}
 
 	void redrawCards()
@@ -217,6 +248,23 @@ public class GameScene : MonoSingleton<GameScene>
 			cr.gameObject.SetActive(false);
 			i++;
 		}
+
+		i = 0;
+		foreach (var c in Field.Characters)
+		{
+			if( c.Id == 1 )
+			{
+				continue;
+			}
+			var er = FindEnemyRenderer(c);
+			er.gameObject.SetActive(true);
+			var pos = GetCardPosition(EnemyHolder, Field.Characters.Count - 1, i, 400);
+			er.gameObject.transform.SetAsLastSibling();
+			er.transform.DOLocalMove(pos, 0.3f);
+			er.Redraw(c);
+			i++;
+		}
+
 	}
 
 	void onCardClick(Card card)
@@ -250,23 +298,23 @@ public class GameScene : MonoSingleton<GameScene>
 		CardSelector.Open("えらんでね", Field.Stack).Done(card => { Debug.Log(card.T.Name); });
 	}
 
-	int CardWidth = 160;
-	int CardHeight = 230;
+	const int CardWidth = 160;
+	const int CardHeight = 230;
 
-	public Vector3 GetCardPosition(Graphic placeHolder, int num, int idx)
+	public Vector3 GetCardPosition(Graphic placeHolder, int num, int idx, int space = CardWidth)
 	{
 		var rt = placeHolder.rectTransform;
 		var rect = rt.rect;
 		var width = rect.width;
 		Vector3 localPos;
-		if( width >= CardWidth * num )
+		if( width >= space * num )
 		{
-			localPos = new Vector3(rect.xMin + CardWidth * idx + CardWidth / 2, rect.center.y);
+			localPos = new Vector3(rect.xMin + space * idx + space / 2, rect.center.y);
 		}
 		else
 		{
-			var margin = (width - CardWidth) / (num - 1);
-			localPos = new Vector3(rect.xMin + margin * idx + CardWidth / 2, rect.center.y);
+			var margin = (width - space) / (num - 1);
+			localPos = new Vector3(rect.xMin + margin * idx + space / 2, rect.center.y);
 		}
 		return FieldHolder.transform.InverseTransformPoint(placeHolder.transform.TransformPoint(localPos));
 	}

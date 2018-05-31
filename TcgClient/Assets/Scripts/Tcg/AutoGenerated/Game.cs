@@ -302,6 +302,8 @@ namespace Game {
 
     public List<global::Game.StatusChange> StatusList = new List<global::Game.StatusChange>();
 
+    public int ImageId;
+
     #region Lite runtime methods
     #endregion
 
@@ -315,6 +317,9 @@ namespace Game {
       }
       if (Type != global::Game.CharacterType.Player) {
         output.WriteEnum(3, (int) Type, Type);
+      }
+      if (ImageId != 0) {
+        output.WriteInt32(4, ImageId);
       }
       if (StatusList != null && StatusList.Count > 0) {
         output.WriteMessageArray(22, StatusList);
@@ -348,6 +353,9 @@ namespace Game {
         foreach (global::Game.StatusChange element in StatusList) {
           size += pb::CodedOutputStream.ComputeMessageSize(22, element);
         }
+      }
+      if (ImageId != 0) {
+        size += pb::CodedOutputStream.ComputeInt32Size(4, ImageId);
       }
       return size;
     }
@@ -383,6 +391,10 @@ namespace Game {
           }
           case 24: {
             input.ReadEnum(ref this.Type);
+            break;
+          }
+          case 32: {
+            input.ReadInt32(ref this.ImageId);
             break;
           }
           case 178: {

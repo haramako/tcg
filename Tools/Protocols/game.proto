@@ -37,6 +37,8 @@ message Character {
 	CharacterType type = 3;
 	PlayerInfo player_info = 25; /// プレイヤーの場合のみ存在する、プレイヤーの情報
 	repeated StatusChange status_list = 22; /// 状態変化
+
+	int32 image_id = 4; // 画像の番号
 }
 
 message PlayerInfo {

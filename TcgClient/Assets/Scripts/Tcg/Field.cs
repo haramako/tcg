@@ -47,15 +47,16 @@ namespace Game
 		/// </summary>
 		public IReadOnlyList<Card> Opened => RawOpened;
 
+		public IReadOnlyList<Character> Characters => characters_;
+
+		public Character Player { get; private set; }
+
 		public FieldInfo FieldInfo;
 
 		/// <summary>
 		/// スレッド間の通信を行う
 		/// </summary>
 		public FieldConnection Conn;
-
-		public Character Player { get; private set; }
-		public Character Enemy { get; private set; }
 
 		/// <summary>
 		/// 手札(編集用のアクセスが必要な時のみ使用して、基本は使わない)
@@ -83,6 +84,11 @@ namespace Game
 		List<Card> RawOpened => opened_;
 
 		/// <summary>
+		/// すべてのキャラクタ
+		/// </summary>
+		List<Character> RawCharacters => characters_;
+
+		/// <summary>
 		/// すべてのカード
 		/// 移動がちゃんと行われたかを検証するためのもの
 		/// </summary>
@@ -93,6 +99,7 @@ namespace Game
 		List<Card> grave_ = new List<Card>();
 		List<Card> discarded_ = new List<Card>();
 		List<Card> opened_ = new List<Card>();
+		List<Character> characters_ = new List<Character>();
 
 		/// <summary>
 		/// 次に加わるカードのID
@@ -110,8 +117,14 @@ namespace Game
 				Mana = Config.DefaultMana,
 			};
 
-			Player = new Character() {Hp = Config.DefaultMaxHp};
-			Enemy = new Character() {Hp = 120};
+			Player = new Character() {Id = 1, ImageId = 1, Hp = Config.DefaultMaxHp};
+			characters_.Add(Player);
+
+			for (int i = 0; i < 3; i++)
+			{
+				var c = new Character() { Id = i + 2, ImageId = 1, Hp = 120 };
+				characters_.Add(c);
+			}
 
 			Conn = new FieldConnection(this);
 			Conn.RequestTimeoutMillis = 1000;

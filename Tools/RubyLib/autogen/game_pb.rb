@@ -24,6 +24,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     optional :type, :enum, 3, "Game.CharacterType"
     optional :player_info, :message, 25, "Game.PlayerInfo"
     repeated :status_list, :message, 22, "Game.StatusChange"
+    optional :image_id, :int32, 4
   end
   add_message "Game.PlayerInfo" do
   end

@@ -117,14 +117,16 @@ enum SpecialType {
 
 	/**
 	 * カードを引く
+	 *
 	 * draw(2) => 2枚カードを引く
 	 */
 	Draw = 2;
 
 	/**
 	 * 状態異常を付与する
-	 *
+	 * 
 	 * add_status(3, status:weak) => 弱体(3)を付与
+	 *
 	 * add_status(5, status:power_up) => 強化(5)を付与
 	 */
 	AddStatus = 3;
@@ -147,6 +149,7 @@ enum SpecialType {
 	 * カードのコピーを特定の場所に追加
 	 * 
 	 * clone_card(location:stack) => カードを山札に追加
+	 *
 	 * clone_card(amount:2, location:grave) => カードを捨て札に2枚追加
 	 */
 	CloneCard = 9;
@@ -162,6 +165,7 @@ enum SpecialType {
 	 * HPを得る
 	 * 
 	 * add_hp(2) => HPを２得る
+	 *
 	 * add_hp(-4) => HPを４失う
 	 */
 	AddHp = 11;
@@ -172,6 +176,7 @@ enum SpecialType {
 	 * optにrandomを指定すると、任意ではなく、ランダムのカードが対象となる
 	 *
 	 * move_card(location: hand, location_to: stack) => 手札から捨て札に移動
+	 *
 	 * move_card(2, random, location: discard, location_to: hand) => 捨て札から手札にランダムで2枚移動
 	 */
 	MoveCard = 12;

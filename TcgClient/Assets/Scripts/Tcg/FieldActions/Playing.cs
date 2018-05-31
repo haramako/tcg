@@ -16,7 +16,7 @@ namespace Game
 			f.SendAndWait(new GameLog.FocusCard { CardId = card.Id });
 
 			f.FieldInfo.Mana -= card.T.Cost;
-			var param = new SpecialParam { Card = card, Executer = f.Player, Target = f.Enemy };
+			var param = new SpecialParam { Card = card, Executer = f.Player, Target = f.Characters[1] };
 			var ok = card.ExecuteSpecial(f, param);
 
 			if (ok)
