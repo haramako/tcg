@@ -2,7 +2,7 @@
 source 'https://rubygems.org'
 
 gem 'rake'
-gem 'activesupport', '<=4.2.4'
+gem 'activesupport'
 gem 'google-protobuf'
 gem 'spreadsheet'
 gem 'rubyzip'

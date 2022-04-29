@@ -10,3 +10,6 @@
 /*.exe
 /*_Data
 /*.Dll
+/Logs
+/.vsconfig
+/UserSettings
